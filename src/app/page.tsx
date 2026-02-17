@@ -33,57 +33,64 @@ export default function Home() {
   }, [index]);
 
   return (
-    <main className="relative w-full h-screen overflow-hidden bg-black flex items-center justify-center">
-      {/* Título y Favicon */}
-      <title>SEMPI</title>
-      <link rel="icon" href={FAVICON_URL} />
+    <>
+      {/* Esto ayuda a que el navegador actualice la pestaña correctamente */}
+      <head>
+        <title>SEMPI</title>
+        <link rel="icon" href={FAVICON_URL} />
+      </head>
 
-      {/* Animación de parpadeo ajustada a 0.8s */}
-      <style dangerouslySetInnerHTML={{ __html: `
-        @keyframes blink-bruto {
-          0% { visibility: visible; }
-          50% { visibility: hidden; }
-          100% { visibility: visible; }
-        }
-        .text-cutre-blink {
-          animation: blink-bruto 0.8s steps(1) infinite;
-        }
-      `}} />
+      <main className="relative w-full h-screen overflow-hidden bg-black flex items-center justify-center">
+        <style dangerouslySetInnerHTML={{ __html: `
+          @keyframes blink-bruto {
+            0% { visibility: visible; }
+            50% { visibility: hidden; }
+            100% { visibility: visible; }
+          }
+          .text-cutre-blink {
+            animation: blink-bruto 0.8s steps(1) infinite;
+          }
+        `}} />
 
-      {!isFinal ? (
-        <div className={`absolute inset-0 w-full h-full transition-opacity duration-300 ease-in-out ${opacity ? 'opacity-100' : 'opacity-0'}`}>
-          <img src={images[index]} alt="Intro" className="w-full h-full object-cover" />
-        </div>
-      ) : (
-        <a 
-          href={WHATSAPP_LINK}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="relative z-10 w-full h-full flex flex-col items-center justify-center cursor-pointer"
-        >
-          <img src={finalImage} alt="Join" className="absolute inset-0 w-full h-full object-cover z-0" />
-          
-          <div className="relative z-20 px-4 flex flex-col items-center">
-            <h1 
-              className="text-cutre-blink"
-              style={{ 
-                fontFamily: '"Comic Sans MS", "Comic Sans", cursive',
-                color: '#00FF00',
-                fontSize: 'clamp(1.5rem, 8vw, 4.5rem)',
-                textDecoration: 'underline',
-                fontWeight: '900',
-                textAlign: 'center',
-                lineHeight: '1.2',
-                letterSpacing: '0.3em',
-                /* Glow puro sin sombra negra */
-                filter: 'drop-shadow(0 0 10px #00FF00) drop-shadow(0 0 20px #00FF00)',
-              }}
-            >
-              ¡¡ ÚNETE A SEMPI AHORA, <br /> CLICK YA !!
-            </h1>
+        {!isFinal ? (
+          <div className={`absolute inset-0 w-full h-full transition-opacity duration-300 ease-in-out ${opacity ? 'opacity-100' : 'opacity-0'}`}>
+            <img 
+              src={images[index]} 
+              alt="Intro" 
+              className="w-full h-full object-cover"
+              onError={(e) => console.error("Error cargando imagen:", images[index])} 
+            />
           </div>
-        </a>
-      )}
-    </main>
+        ) : (
+          <a 
+            href={WHATSAPP_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="relative z-10 w-full h-full flex flex-col items-center justify-center cursor-pointer"
+          >
+            <img src={finalImage} alt="Join" className="absolute inset-0 w-full h-full object-cover z-0" />
+            
+            <div className="relative z-20 px-4 flex flex-col items-center">
+              <h1 
+                className="text-cutre-blink"
+                style={{ 
+                  fontFamily: '"Comic Sans MS", "Comic Sans", cursive',
+                  color: '#00FF00',
+                  fontSize: 'clamp(1.5rem, 8vw, 4.5rem)',
+                  textDecoration: 'underline',
+                  fontWeight: '900',
+                  textAlign: 'center',
+                  lineHeight: '1.2',
+                  letterSpacing: '0.3em',
+                  filter: 'drop-shadow(0 0 10px #00FF00) drop-shadow(0 0 20px #00FF00)',
+                }}
+              >
+                ¡¡ ÚNETE A SEMPI AHORA, <br /> CLICK YA !!
+              </h1>
+            </div>
+          </a>
+        )}
+      </main>
+    </>
   );
 }
