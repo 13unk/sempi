@@ -9,6 +9,7 @@ const images = [
 ];
 const finalImage = 'https://i.postimg.cc/7Z0zCQmy/chadjoin.png';
 const WHATSAPP_LINK = 'https://chat.whatsapp.com/CSWvtoK3lmY1Wlye06FcjK';
+const FAVICON_URL = 'https://i.postimg.cc/JhzS1nwy/icon.png';
 
 export default function Home() {
   const [index, setIndex] = useState(0);
@@ -33,6 +34,10 @@ export default function Home() {
 
   return (
     <main className="relative w-full h-screen overflow-hidden bg-black flex items-center justify-center">
+      {/* Título y Favicon */}
+      <title>SEMPI</title>
+      <link rel="icon" href={FAVICON_URL} />
+
       {/* Animación de parpadeo ajustada a 0.8s */}
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes blink-bruto {
