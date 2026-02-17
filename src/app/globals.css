@@ -2,9 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Esto asegura que las imágenes ocupen todo sin márgenes raros */
+/* Reseteo y limpieza de márgenes */
 body {
   margin: 0;
   padding: 0;
   background-color: black;
+  color: white;
+  overflow-x: hidden; /* Evita scrolls laterales accidentales */
+}
+
+@layer utilities {
+  /* Animación de parpadeo agresivo tipo anuncio antiguo */
+  .animate-cutre-blink {
+    animation: cutre-blink 0.3s steps(2, start) infinite;
+  }
+
+  @keyframes cutre-blink {
+    to {
+      visibility: hidden;
+    }
+  }
+
+  /* Variación para el glow (brillo) si quieres que también parpadee la intensidad */
+  .glow-green {
+    filter: drop-shadow(0 0 10px #00FF00) drop-shadow(0 0 25px #00FF00);
+  }
 }
