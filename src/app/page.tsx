@@ -51,11 +51,15 @@ function Painting({
   posX,
   posY,
   rot,
+  size,
+  frame,
 }: {
   src: string;
   posX: number;
   posY: number;
   rot: number;
+  size: number;
+  frame: number;
 }) {
   // Skip rendering when this side has no painting (zigzag pattern)
   if (!src) return null;
@@ -63,15 +67,15 @@ function Painting({
     <div
       style={{
         position: "absolute",
-        left: `${posX - FRAMED_SIZE / 2}px`,
-        top: `${posY - FRAMED_SIZE / 2 - 15}px`,
+        left: `${posX - frame / 2}px`,
+        top: `${posY - frame / 2 - 15}px`,
         transform: `rotate(${rot}deg)`,
       }}
     >
       <div
         style={{
-          width: `${FRAMED_SIZE}px`,
-          height: `${FRAMED_SIZE}px`,
+          width: `${frame}px`,
+          height: `${frame}px`,
           background: "linear-gradient(135deg, #c9a84c, #8a6914, #c9a84c)",
           borderRadius: "2px",
           padding: `${FRAME_WIDTH}px`,
@@ -90,8 +94,8 @@ function Painting({
             (e.currentTarget.parentElement as HTMLElement).style.visibility = "hidden";
           }}
           style={{
-            width: `${PAINTING_SIZE}px`,
-            height: `${PAINTING_SIZE}px`,
+            width: `${size}px`,
+            height: `${size}px`,
             objectFit: "cover",
             borderRadius: "1px",
             display: "block",
@@ -115,8 +119,13 @@ export default function Home() {
   const [isMobile, setIsMobile] = useState(false);
 
   // Reduce corridor copies on mobile to lower memory pressure
-  const copies = isMobile ? 1 : 3;
+  const copies = isMobile ? 2 : 3;
   const corridorLength = LOOP_LENGTH * copies;
+
+  // Halve ribbon/painting sizes on mobile
+  const paintingSize = isMobile ? PAINTING_SIZE / 2 : PAINTING_SIZE;
+  const framedSize = paintingSize + FRAME_WIDTH * 2;
+  const ribbonHeight = isMobile ? CORRIDOR_HEIGHT * 0.3 : CORRIDOR_HEIGHT * 0.6;
 
   // Detect mobile / portrait screens
   useEffect(() => {
@@ -310,7 +319,7 @@ export default function Home() {
             style={{
               position: "absolute",
               width: `${corridorLength}px`,
-              height: `${CORRIDOR_HEIGHT * 0.6}px`,
+              height: `${ribbonHeight}px`,
               backgroundImage: `
                 linear-gradient(180deg, #001a00 0%, rgba(15,125,9,0.95) 20%, rgba(31,250,19,1) 50%, rgba(15,125,9,0.95) 80%, #001a00 100%),
                 repeating-linear-gradient(90deg, rgba(0,0,0,0.9) 0px, rgba(255,255,255,0.08) 200px, rgba(0,0,0,0.9) 400px)
@@ -319,7 +328,7 @@ export default function Home() {
               transform: `rotateY(90deg) translateZ(-${CORRIDOR_WIDTH / 2}px)`,
               transformOrigin: "center center",
               left: `-${corridorLength / 2}px`,
-              top: `-${(CORRIDOR_HEIGHT * 0.6) / 2}px`,
+              top: `-${ribbonHeight / 2}px`,
               boxShadow: "0 20px 50px rgba(0,0,0,0.8)",
             }}
           >
@@ -328,8 +337,10 @@ export default function Home() {
                 key={`left-${i}`}
                 src={p.leftSrc}
                 posX={p.depth}
-                posY={(CORRIDOR_HEIGHT * 0.6) / 2}
+                posY={ribbonHeight / 2}
                 rot={p.leftRot}
+                size={paintingSize}
+                frame={framedSize}
               />
             ))}
           </div>
@@ -339,7 +350,7 @@ export default function Home() {
             style={{
               position: "absolute",
               width: `${corridorLength}px`,
-              height: `${CORRIDOR_HEIGHT * 0.6}px`,
+              height: `${ribbonHeight}px`,
               backgroundImage: `
                 linear-gradient(180deg, #001a00 0%, rgba(15,125,9,0.95) 20%, rgba(31,250,19,1) 50%, rgba(15,125,9,0.95) 80%, #001a00 100%),
                 repeating-linear-gradient(90deg, rgba(0,0,0,0.9) 0px, rgba(255,255,255,0.08) 200px, rgba(0,0,0,0.9) 400px)
@@ -348,7 +359,7 @@ export default function Home() {
               transform: `rotateY(-90deg) translateZ(-${CORRIDOR_WIDTH / 2}px)`,
               transformOrigin: "center center",
               left: `-${corridorLength / 2}px`,
-              top: `-${(CORRIDOR_HEIGHT * 0.6) / 2}px`,
+              top: `-${ribbonHeight / 2}px`,
               boxShadow: "0 20px 50px rgba(0,0,0,0.8)",
             }}
           >
@@ -357,8 +368,10 @@ export default function Home() {
                 key={`right-${i}`}
                 src={p.rightSrc}
                 posX={corridorLength - p.depth}
-                posY={(CORRIDOR_HEIGHT * 0.6) / 2}
+                posY={ribbonHeight / 2}
                 rot={p.rightRot}
+                size={paintingSize}
+                frame={framedSize}
               />
             ))}
           </div>
