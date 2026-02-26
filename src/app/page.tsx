@@ -101,7 +101,6 @@ function Painting({
         <img
           src={src}
           alt=""
-          loading="lazy"
           style={{
             width: `${PAINTING_SIZE}px`,
             height: `${PAINTING_SIZE}px`,
