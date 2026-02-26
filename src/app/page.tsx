@@ -369,6 +369,20 @@ export default function Home() {
               />
             ))}
           </div>
+
+          {/* BACKGROUND GIGACHAD (END OF CORRIDOR) */}
+          <div
+            style={{
+              position: "absolute",
+              width: `${CORRIDOR_WIDTH}px`,
+              height: `${CORRIDOR_HEIGHT}px`,
+              left: `-${CORRIDOR_WIDTH / 2}px`,
+              top: `-${CORRIDOR_HEIGHT / 2}px`,
+              transform: `translateZ(${CORRIDOR_LENGTH}px)`,
+              background: "url('https://i.postimg.cc/XJj6p7Bd/gigachad-grab.png') center center / cover no-repeat",
+              zIndex: -1,
+            }}
+          />
         </div>
       </div>
 
