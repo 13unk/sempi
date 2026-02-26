@@ -204,8 +204,7 @@ export default function Home() {
     depth: number;
   }[] = [];
 
-  const mobileCopies = isMobile ? 1 : COPIES;
-  for (let copy = 0; copy < mobileCopies; copy++) {
+  for (let copy = 0; copy < COPIES; copy++) {
     for (let i = 0; i < TOTAL_ROWS; i++) {
       allPaintings.push({
         leftSrc: PAINTING_ROWS[i].left,
