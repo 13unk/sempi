@@ -244,11 +244,8 @@ export default function Home() {
           /* Escalar el escenario en pantallas verticales sin deformar los cuadros */
           @media (max-aspect-ratio: 1/1) {
             .mobile-scaler {
-              transform: scale(1.9) !important;
+              transform: scale(0.7) !important;
             }
-          @keyframes strobe {
-            0%, 49% { background-color: #000; }
-            50%, 100% { background-color: #fff; }
           }
         `}</style>
         <div
