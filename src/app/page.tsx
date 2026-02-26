@@ -86,7 +86,7 @@ function Painting({
         <img
           src={src}
           alt=""
-          loading="lazy"
+          loading="eager"
           decoding="async"
           fetchPriority="low"
           onError={(e) => {
@@ -134,10 +134,27 @@ export default function Home() {
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  // Wait for everything to mount, then fade in
+  // Preload all painting images before revealing the page
   useEffect(() => {
-    const timer = setTimeout(() => setReady(true), 500);
-    return () => clearTimeout(timer);
+    let cancelled = false;
+    const preload = async () => {
+      await Promise.all(
+        PAINTING_IMAGES.map(
+          (src) =>
+            new Promise<void>((resolve) => {
+              const img = new Image();
+              img.onload = () => resolve();
+              img.onerror = () => resolve(); // don't block on broken images
+              img.src = src;
+            })
+        )
+      );
+      if (!cancelled) setReady(true);
+    };
+    preload();
+    // Safety fallback: show page after 10s even if images haven't loaded
+    const fallback = setTimeout(() => { if (!cancelled) setReady(true); }, 10000);
+    return () => { cancelled = true; clearTimeout(fallback); };
   }, []);
 
   // Scrolling disabled per user request
