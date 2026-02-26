@@ -224,6 +224,7 @@ export default function Home() {
   return (
     <div
       ref={wrapperRef}
+      onClick={() => window.open("https://chat.whatsapp.com/CSWvtoK3lmY1Wlye06FcjK", "_blank")}
       style={{
         width: "100vw",
         height: "100vh",
@@ -237,6 +238,7 @@ export default function Home() {
         position: "relative",
         opacity: ready ? 1 : 0,
         transition: "opacity 0.8s ease-in",
+        cursor: "pointer",
       }}
     >
       {/* 3D corridor scene */}
