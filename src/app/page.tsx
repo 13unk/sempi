@@ -56,11 +56,12 @@ const SPEED = 55; // px/s
 const COPIES = 3;
 const CORRIDOR_LENGTH = LOOP_LENGTH * COPIES;
 
-const CORRIDOR_WIDTH = 600;
-const CORRIDOR_HEIGHT = 400;
+const CORRIDOR_WIDTH = 800;
+const CORRIDOR_HEIGHT = 500;
 const PAINTING_SIZE = 240;
 const FRAME_WIDTH = 4;
 const FRAMED_SIZE = PAINTING_SIZE + FRAME_WIDTH * 2;
+const HORIZON_DEPTH = 3000; // How far the Gigachad is
 
 // Sphere constants
 const SPHERE_RADIUS = 22; // px visual size on screen
@@ -135,16 +136,18 @@ export default function Home() {
   const initializedRef = useRef(false);
   const speedMultiplierRef = useRef(1);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const [ready, setReady] = useState(false);
 
-  // Scroll wheel: up = faster (scrolling down/backwards is disabled)
+  // Wait for everything to mount, then fade in
+  useEffect(() => {
+    const timer = setTimeout(() => setReady(true), 500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Scrolling disabled per user request
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
-      if (e.deltaY < 0) {
-        // Scroll up → speed up
-        speedMultiplierRef.current = Math.min(speedMultiplierRef.current + 0.5, 5);
-      }
-      // Scrolling backwards (deltaY > 0) no longer slows it down manually
     };
     window.addEventListener("wheel", handleWheel, { passive: false });
     return () => window.removeEventListener("wheel", handleWheel);
@@ -223,7 +226,7 @@ export default function Home() {
       style={{
         width: "100vw",
         height: "100vh",
-        background: "#0a0a0a",
+        background: "#000",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -231,6 +234,8 @@ export default function Home() {
         perspectiveOrigin: "50% 50%",
         overflow: "hidden",
         position: "relative",
+        opacity: ready ? 1 : 0,
+        transition: "opacity 0.8s ease-in",
       }}
     >
       {/* 3D corridor scene */}
@@ -241,6 +246,9 @@ export default function Home() {
             .mobile-scaler {
               transform: scale(1.9) !important;
             }
+          @keyframes strobe {
+            0%, 49% { background-color: #000; }
+            50%, 100% { background-color: #fff; }
           }
         `}</style>
         <div
@@ -253,53 +261,22 @@ export default function Home() {
             height: 0,
           }}
         >
-          {/* FLOOR — carpet pattern */}
+          {/* --- TOP RIBBON --- */}
           <div
             style={{
               position: "absolute",
-              width: `${CORRIDOR_WIDTH}px`,
+              width: `${CORRIDOR_WIDTH * 1.5}px`,
               height: `${CORRIDOR_LENGTH}px`,
-              backgroundColor: "#6b1c23",
               backgroundImage: `
-              repeating-linear-gradient(
-                0deg,
-                transparent 0px, transparent 38px,
-                rgba(139,28,35,0.6) 38px, rgba(139,28,35,0.6) 40px
-              ),
-              repeating-linear-gradient(
-                90deg,
-                transparent 0px, transparent 38px,
-                rgba(139,28,35,0.6) 38px, rgba(139,28,35,0.6) 40px
-              ),
-              repeating-linear-gradient(
-                0deg,
-                transparent 0px, transparent 118px,
-                rgba(180,140,60,0.35) 118px, rgba(180,140,60,0.35) 122px
-              ),
-              repeating-linear-gradient(
-                90deg,
-                transparent 0px, transparent 118px,
-                rgba(180,140,60,0.35) 118px, rgba(180,140,60,0.35) 122px
-              )
-            `,
-              transform: `rotateX(90deg) translateZ(${CORRIDOR_HEIGHT / 2}px)`,
-              transformOrigin: "center center",
-              left: `-${CORRIDOR_WIDTH / 2}px`,
-              top: `-${CORRIDOR_LENGTH}px`,
-            }}
-          />
-
-          {/* CEILING */}
-          <div
-            style={{
-              position: "absolute",
-              width: `${CORRIDOR_WIDTH}px`,
-              height: `${CORRIDOR_LENGTH}px`,
-              background: "#111",
+                linear-gradient(90deg, #001a00 0%, rgba(15,125,9,0.95) 20%, rgba(31,250,19,1) 50%, rgba(15,125,9,0.95) 80%, #001a00 100%),
+                repeating-linear-gradient(0deg, rgba(0,0,0,0.9) 0px, rgba(255,255,255,0.08) 200px, rgba(0,0,0,0.9) 400px)
+              `,
+              backgroundBlendMode: "overlay",
               transform: `rotateX(-90deg) translateZ(-${CORRIDOR_HEIGHT / 2}px)`,
               transformOrigin: "center center",
-              left: `-${CORRIDOR_WIDTH / 2}px`,
+              left: `-${(CORRIDOR_WIDTH * 1.5) / 2}px`,
               top: `-${CORRIDOR_LENGTH}px`,
+              boxShadow: "0 20px 50px rgba(0,0,0,0.8)",
             }}
           >
             {allPaintings.map((p, i) => (
@@ -320,18 +297,42 @@ export default function Home() {
             ))}
           </div>
 
-          {/* LEFT WALL */}
+          {/* --- BOTTOM RIBBON --- */}
+          <div
+            style={{
+              position: "absolute",
+              width: `${CORRIDOR_WIDTH * 1.5}px`,
+              height: `${CORRIDOR_LENGTH}px`,
+              backgroundColor: "#001a00",
+              backgroundImage: `
+                linear-gradient(90deg, #001a00 0%, rgba(15,125,9,0.9) 20%, rgba(31,250,19,1) 50%, rgba(15,125,9,0.9) 80%, #001a00 100%),
+                repeating-linear-gradient(0deg, rgba(0,0,0,0.9) 0px, rgba(255,255,255,0.08) 200px, rgba(0,0,0,0.9) 400px)
+              `,
+              backgroundBlendMode: "overlay",
+              transform: `rotateX(90deg) translateZ(${CORRIDOR_HEIGHT / 2}px)`,
+              transformOrigin: "center center",
+              left: `-${(CORRIDOR_WIDTH * 1.5) / 2}px`,
+              top: `-${CORRIDOR_LENGTH}px`,
+              boxShadow: "0 -20px 50px rgba(0,0,0,0.8)",
+            }}
+          />
+
+          {/* --- LEFT RIBBON --- */}
           <div
             style={{
               position: "absolute",
               width: `${CORRIDOR_LENGTH}px`,
-              height: `${CORRIDOR_HEIGHT}px`,
-              background:
-                "linear-gradient(180deg, #1e1e1e 0%, #252525 50%, #1a1a1a 100%)",
+              height: `${CORRIDOR_HEIGHT * 0.6}px`,
+              backgroundImage: `
+                linear-gradient(180deg, #001a00 0%, rgba(15,125,9,0.95) 20%, rgba(31,250,19,1) 50%, rgba(15,125,9,0.95) 80%, #001a00 100%),
+                repeating-linear-gradient(90deg, rgba(0,0,0,0.9) 0px, rgba(255,255,255,0.08) 200px, rgba(0,0,0,0.9) 400px)
+              `,
+              backgroundBlendMode: "overlay",
               transform: `rotateY(90deg) translateZ(-${CORRIDOR_WIDTH / 2}px)`,
               transformOrigin: "center center",
               left: `-${CORRIDOR_LENGTH / 2}px`,
-              top: `-${CORRIDOR_HEIGHT / 2}px`,
+              top: `-${(CORRIDOR_HEIGHT * 0.6) / 2}px`,
+              boxShadow: "0 20px 50px rgba(0,0,0,0.8)",
             }}
           >
             {allPaintings.map((p, i) => (
@@ -339,24 +340,28 @@ export default function Home() {
                 key={`left-${i}`}
                 src={p.leftSrc}
                 posX={p.depth}
-                posY={CORRIDOR_HEIGHT / 2}
+                posY={(CORRIDOR_HEIGHT * 0.6) / 2}
                 rot={p.leftRot}
               />
             ))}
           </div>
 
-          {/* RIGHT WALL */}
+          {/* --- RIGHT RIBBON --- */}
           <div
             style={{
               position: "absolute",
               width: `${CORRIDOR_LENGTH}px`,
-              height: `${CORRIDOR_HEIGHT}px`,
-              background:
-                "linear-gradient(180deg, #1e1e1e 0%, #252525 50%, #1a1a1a 100%)",
+              height: `${CORRIDOR_HEIGHT * 0.6}px`,
+              backgroundImage: `
+                linear-gradient(180deg, #001a00 0%, rgba(15,125,9,0.95) 20%, rgba(31,250,19,1) 50%, rgba(15,125,9,0.95) 80%, #001a00 100%),
+                repeating-linear-gradient(90deg, rgba(0,0,0,0.9) 0px, rgba(255,255,255,0.08) 200px, rgba(0,0,0,0.9) 400px)
+              `,
+              backgroundBlendMode: "overlay",
               transform: `rotateY(-90deg) translateZ(-${CORRIDOR_WIDTH / 2}px)`,
               transformOrigin: "center center",
               left: `-${CORRIDOR_LENGTH / 2}px`,
-              top: `-${CORRIDOR_HEIGHT / 2}px`,
+              top: `-${(CORRIDOR_HEIGHT * 0.6) / 2}px`,
+              boxShadow: "0 20px 50px rgba(0,0,0,0.8)",
             }}
           >
             {allPaintings.map((p, i) => (
@@ -364,25 +369,43 @@ export default function Home() {
                 key={`right-${i}`}
                 src={p.rightSrc}
                 posX={CORRIDOR_LENGTH - p.depth}
-                posY={CORRIDOR_HEIGHT / 2}
+                posY={(CORRIDOR_HEIGHT * 0.6) / 2}
                 rot={p.rightRot}
               />
             ))}
           </div>
 
-          {/* BACKGROUND GIGACHAD (END OF CORRIDOR) */}
+          {/* BACKGROUND GIGACHAD VIDEO (Always floats HORIZON_DEPTH pixels away from camera) */}
           <div
             style={{
               position: "absolute",
-              width: `${CORRIDOR_WIDTH}px`,
-              height: `${CORRIDOR_HEIGHT}px`,
-              left: `-${CORRIDOR_WIDTH / 2}px`,
-              top: `-${CORRIDOR_HEIGHT / 2}px`,
-              transform: `translateZ(${CORRIDOR_LENGTH}px)`,
-              background: "url('https://i.postimg.cc/XJj6p7Bd/gigachad-grab.png') center center / cover no-repeat",
+              width: `${HORIZON_DEPTH * 1.8}px`,   // Original proportionate size
+              height: `${HORIZON_DEPTH * 1.8}px`,
+              left: `-${(HORIZON_DEPTH * 1.8) / 2}px`,
+              top: `-${(HORIZON_DEPTH * 1.8) / 2}px`,
+              // Push the video slightly down so his eyes (top of video) sit exactly at the Y=0 vanishing point
+              transform: `translateZ(-${cameraZ + HORIZON_DEPTH}px) translateY(450px)`,
+              backgroundColor: "black",
               zIndex: -1,
+              opacity: 1,
             }}
-          />
+          >
+            <video
+              src="https://res.cloudinary.com/dhwd9gz6o/video/upload/v1772072968/gigachad_grab2_kkyhfg.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              controls={false}
+              disablePictureInPicture
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                objectPosition: "center",
+              }}
+            />
+          </div>
         </div>
       </div>
 
@@ -397,11 +420,11 @@ export default function Home() {
           top: "70%",
           transform: "translate(-50%, -50%) scaleY(1.8)",
           zIndex: 15,
-          color: "#9b5de5",
+          color: "#1ffa13",
           fontFamily: "Impact, 'Arial Black', sans-serif",
           fontSize: "48px",
           textDecoration: "none",
-          textShadow: "0 0 20px rgba(155,93,229,0.6), 0 2px 8px rgba(0,0,0,0.5)",
+          textShadow: "0 0 20px rgba(31,250,19,0.6), 0 2px 8px rgba(0,0,0,0.5)",
           lineHeight: 0.9,
           textAlign: "center" as const,
           cursor: "pointer",
