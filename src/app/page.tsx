@@ -122,10 +122,9 @@ export default function Home() {
   const copies = isMobile ? 2 : 3;
   const corridorLength = LOOP_LENGTH * copies;
 
-  // Halve ribbon/painting sizes on mobile
-  const paintingSize = isMobile ? PAINTING_SIZE / 2 : PAINTING_SIZE;
-  const framedSize = paintingSize + FRAME_WIDTH * 2;
-  const ribbonHeight = isMobile ? CORRIDOR_HEIGHT * 0.3 : CORRIDOR_HEIGHT * 0.6;
+  const paintingSize = PAINTING_SIZE;
+  const framedSize = FRAMED_SIZE;
+  const ribbonHeight = CORRIDOR_HEIGHT * 0.6;
 
   // Detect mobile / portrait screens
   useEffect(() => {
