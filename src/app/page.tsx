@@ -405,6 +405,7 @@ export default function Home() {
         href="https://chat.whatsapp.com/CSWvtoK3lmY1Wlye06FcjK"
         target="_blank"
         rel="noopener noreferrer"
+        className="cta-text"
         style={{
           position: "absolute",
           left: "50%",
@@ -421,6 +422,7 @@ export default function Home() {
           cursor: "pointer",
           userSelect: "none" as const,
           animation: "blink 1s step-end infinite",
+          whiteSpace: "nowrap" as const,
         }}
         data-hover="true"
       >
@@ -430,6 +432,12 @@ export default function Home() {
           @keyframes blink {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.2; }
+          }
+          @media (max-width: 600px) {
+            .cta-text {
+              font-size: 24px !important;
+              letter-spacing: 4px !important;
+            }
           }
         `}</style>
       </a>
