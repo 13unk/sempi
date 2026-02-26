@@ -234,32 +234,33 @@ export default function Home() {
       }}
     >
       {/* 3D corridor scene */}
-      <div
-        className="corridor-scene"
-        style={{
-          transformStyle: "preserve-3d",
-          transform: `translateZ(${cameraZ}px)`,
-          position: "relative",
-          width: 0,
-          height: 0,
-        }}
-      >
+      <div className="mobile-scaler" style={{ transformStyle: "preserve-3d" }}>
         <style>{`
           /* Escalar el escenario en pantallas verticales sin deformar los cuadros */
           @media (max-aspect-ratio: 1/1) {
-            .corridor-scene {
-              transform: translateZ(${cameraZ}px) scale(2.2) !important;
+            .mobile-scaler {
+              transform: scale(1.9) !important;
             }
           }
         `}</style>
-        {/* FLOOR — carpet pattern */}
         <div
+          className="corridor-scene"
           style={{
-            position: "absolute",
-            width: `${CORRIDOR_WIDTH}px`,
-            height: `${CORRIDOR_LENGTH}px`,
-            backgroundColor: "#6b1c23",
-            backgroundImage: `
+            transformStyle: "preserve-3d",
+            transform: `translateZ(${cameraZ}px)`,
+            position: "relative",
+            width: 0,
+            height: 0,
+          }}
+        >
+          {/* FLOOR — carpet pattern */}
+          <div
+            style={{
+              position: "absolute",
+              width: `${CORRIDOR_WIDTH}px`,
+              height: `${CORRIDOR_LENGTH}px`,
+              backgroundColor: "#6b1c23",
+              backgroundImage: `
               repeating-linear-gradient(
                 0deg,
                 transparent 0px, transparent 38px,
@@ -281,92 +282,93 @@ export default function Home() {
                 rgba(180,140,60,0.35) 118px, rgba(180,140,60,0.35) 122px
               )
             `,
-            transform: `rotateX(90deg) translateZ(${CORRIDOR_HEIGHT / 2}px)`,
-            transformOrigin: "center center",
-            left: `-${CORRIDOR_WIDTH / 2}px`,
-            top: `-${CORRIDOR_LENGTH}px`,
-          }}
-        />
+              transform: `rotateX(90deg) translateZ(${CORRIDOR_HEIGHT / 2}px)`,
+              transformOrigin: "center center",
+              left: `-${CORRIDOR_WIDTH / 2}px`,
+              top: `-${CORRIDOR_LENGTH}px`,
+            }}
+          />
 
-        {/* CEILING */}
-        <div
-          style={{
-            position: "absolute",
-            width: `${CORRIDOR_WIDTH}px`,
-            height: `${CORRIDOR_LENGTH}px`,
-            background: "#111",
-            transform: `rotateX(-90deg) translateZ(-${CORRIDOR_HEIGHT / 2}px)`,
-            transformOrigin: "center center",
-            left: `-${CORRIDOR_WIDTH / 2}px`,
-            top: `-${CORRIDOR_LENGTH}px`,
-          }}
-        >
-          {allPaintings.map((p, i) => (
-            <div
-              key={`light-${i}`}
-              style={{
-                position: "absolute",
-                width: "100px",
-                height: "16px",
-                background: "rgba(255,255,240,0.7)",
-                borderRadius: "8px",
-                left: "50%",
-                transform: "translateX(-50%)",
-                top: `${p.depth - 8}px`,
-                boxShadow: "0 0 40px 15px rgba(255,255,220,0.15)",
-              }}
-            />
-          ))}
-        </div>
+          {/* CEILING */}
+          <div
+            style={{
+              position: "absolute",
+              width: `${CORRIDOR_WIDTH}px`,
+              height: `${CORRIDOR_LENGTH}px`,
+              background: "#111",
+              transform: `rotateX(-90deg) translateZ(-${CORRIDOR_HEIGHT / 2}px)`,
+              transformOrigin: "center center",
+              left: `-${CORRIDOR_WIDTH / 2}px`,
+              top: `-${CORRIDOR_LENGTH}px`,
+            }}
+          >
+            {allPaintings.map((p, i) => (
+              <div
+                key={`light-${i}`}
+                style={{
+                  position: "absolute",
+                  width: "100px",
+                  height: "16px",
+                  background: "rgba(255,255,240,0.7)",
+                  borderRadius: "8px",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  top: `${p.depth - 8}px`,
+                  boxShadow: "0 0 40px 15px rgba(255,255,220,0.15)",
+                }}
+              />
+            ))}
+          </div>
 
-        {/* LEFT WALL */}
-        <div
-          style={{
-            position: "absolute",
-            width: `${CORRIDOR_LENGTH}px`,
-            height: `${CORRIDOR_HEIGHT}px`,
-            background:
-              "linear-gradient(180deg, #1e1e1e 0%, #252525 50%, #1a1a1a 100%)",
-            transform: `rotateY(90deg) translateZ(-${CORRIDOR_WIDTH / 2}px)`,
-            transformOrigin: "center center",
-            left: `-${CORRIDOR_LENGTH / 2}px`,
-            top: `-${CORRIDOR_HEIGHT / 2}px`,
-          }}
-        >
-          {allPaintings.map((p, i) => (
-            <Painting
-              key={`left-${i}`}
-              src={p.leftSrc}
-              posX={p.depth}
-              posY={CORRIDOR_HEIGHT / 2}
-              rot={p.leftRot}
-            />
-          ))}
-        </div>
+          {/* LEFT WALL */}
+          <div
+            style={{
+              position: "absolute",
+              width: `${CORRIDOR_LENGTH}px`,
+              height: `${CORRIDOR_HEIGHT}px`,
+              background:
+                "linear-gradient(180deg, #1e1e1e 0%, #252525 50%, #1a1a1a 100%)",
+              transform: `rotateY(90deg) translateZ(-${CORRIDOR_WIDTH / 2}px)`,
+              transformOrigin: "center center",
+              left: `-${CORRIDOR_LENGTH / 2}px`,
+              top: `-${CORRIDOR_HEIGHT / 2}px`,
+            }}
+          >
+            {allPaintings.map((p, i) => (
+              <Painting
+                key={`left-${i}`}
+                src={p.leftSrc}
+                posX={p.depth}
+                posY={CORRIDOR_HEIGHT / 2}
+                rot={p.leftRot}
+              />
+            ))}
+          </div>
 
-        {/* RIGHT WALL */}
-        <div
-          style={{
-            position: "absolute",
-            width: `${CORRIDOR_LENGTH}px`,
-            height: `${CORRIDOR_HEIGHT}px`,
-            background:
-              "linear-gradient(180deg, #1e1e1e 0%, #252525 50%, #1a1a1a 100%)",
-            transform: `rotateY(-90deg) translateZ(-${CORRIDOR_WIDTH / 2}px)`,
-            transformOrigin: "center center",
-            left: `-${CORRIDOR_LENGTH / 2}px`,
-            top: `-${CORRIDOR_HEIGHT / 2}px`,
-          }}
-        >
-          {allPaintings.map((p, i) => (
-            <Painting
-              key={`right-${i}`}
-              src={p.rightSrc}
-              posX={CORRIDOR_LENGTH - p.depth}
-              posY={CORRIDOR_HEIGHT / 2}
-              rot={p.rightRot}
-            />
-          ))}
+          {/* RIGHT WALL */}
+          <div
+            style={{
+              position: "absolute",
+              width: `${CORRIDOR_LENGTH}px`,
+              height: `${CORRIDOR_HEIGHT}px`,
+              background:
+                "linear-gradient(180deg, #1e1e1e 0%, #252525 50%, #1a1a1a 100%)",
+              transform: `rotateY(-90deg) translateZ(-${CORRIDOR_WIDTH / 2}px)`,
+              transformOrigin: "center center",
+              left: `-${CORRIDOR_LENGTH / 2}px`,
+              top: `-${CORRIDOR_HEIGHT / 2}px`,
+            }}
+          >
+            {allPaintings.map((p, i) => (
+              <Painting
+                key={`right-${i}`}
+                src={p.rightSrc}
+                posX={CORRIDOR_LENGTH - p.depth}
+                posY={CORRIDOR_HEIGHT / 2}
+                rot={p.rightRot}
+              />
+            ))}
+          </div>
         </div>
       </div>
 
