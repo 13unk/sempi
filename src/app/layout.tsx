@@ -22,10 +22,13 @@ export const metadata: Metadata = {
   openGraph: {
     title: "SEMPI - Únete YA !!",
     description: "CLICK AHORA PARA UNIRTE YA DE YA !!!!",
+    images: ["https://i.postimg.cc/9XWxvCMw/smol.png"],
   },
   twitter: {
+    card: "summary_large_image",
     title: "SEMPI - Únete YA !!",
     description: "CLICK AHORA PARA UNIRTE YA DE YA !!!!",
+    images: ["https://i.postimg.cc/9XWxvCMw/smol.png"],
   },
 };
 
