@@ -424,8 +424,8 @@ export default function Home() {
         }}
         data-hover="true"
       >
-        <span style={{ display: "block", letterSpacing: "8px" }}>ENTRA</span>
-        <span style={{ display: "block", letterSpacing: "14px" }}>YA ! !</span>
+        <span style={{ display: "block", letterSpacing: "8px" }}>ENTRA AHORA !!</span>
+        <span style={{ display: "block", letterSpacing: "8px" }}>HAZ CLICK YA !!</span>
         <style>{`
           @keyframes blink {
             0%, 100% { opacity: 1; }
