@@ -101,6 +101,7 @@ function Painting({
         <img
           src={src}
           alt=""
+          loading="lazy"
           style={{
             width: `${PAINTING_SIZE}px`,
             height: `${PAINTING_SIZE}px`,
@@ -254,6 +255,7 @@ export default function Home() {
             transformStyle: "preserve-3d",
             transform: `translateZ(${cameraZ}px)`,
             position: "relative",
+            willChange: "transform",
             width: 0,
             height: 0,
           }}
@@ -393,6 +395,9 @@ export default function Home() {
               loop
               muted
               playsInline
+              // @ts-ignore — webkit vendor attribute for older iOS
+              webkit-playsinline=""
+              preload="metadata"
               controls={false}
               disablePictureInPicture
               style={{
