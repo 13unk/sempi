@@ -2,51 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Reseteo y limpieza de márgenes */
-body {
+* {
   margin: 0;
   padding: 0;
-  background-color: black;
-  color: white;
-  overflow-x: hidden;
-  /* Evita scrolls laterales accidentales */
+  box-sizing: border-box;
 }
 
-@layer utilities {
-
-  /* Animación de parpadeo agresivo tipo anuncio antiguo */
-  .animate-cutre-blink {
-    animation: cutre-blink 0.3s steps(2, start) infinite;
-  }
-
-  @keyframes cutre-blink {
-    to {
-      visibility: hidden;
-    }
-  }
-
-  /* Variación para el glow (brillo) si quieres que también parpadee la intensidad */
-  .glow-green {
-    filter: drop-shadow(0 0 10px #00FF00) drop-shadow(0 0 25px #00FF00);
-  }
-
-  @keyframes neon-pulse {
-
-    0%,
-    100% {
-      text-shadow: 0 0 10px #00FF00, 0 0 20px #00FF00, 0 0 30px #00FF00;
-      transform: scale(1) translateY(0);
-      opacity: 1;
-    }
-
-    50% {
-      text-shadow: 0 0 5px #00FF00, 0 0 10px #00FF00, 0 0 15px #00FF00;
-      transform: scale(1.1) translateY(-10px);
-      opacity: 0.1;
-    }
-  }
-
-  .animate-neon-pulse {
-    animation: neon-pulse 1.5s ease-in-out infinite;
-  }
+html,
+body {
+  overflow: hidden;
+  background: #0a0a0a;
+  font-family: 'Space Grotesk', sans-serif;
 }
