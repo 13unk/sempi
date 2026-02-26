@@ -2,59 +2,38 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 
-// 14 painting images
+// 14 painting images (WebP for smaller file size)
 const PAINTING_IMAGES = [
-  "/cuadro1.png", "/cuadro2.png", "/cuadro3.png", "/cuadro4.png",
-  "/cuadro5.png", "/cuadro6.png", "/cuadro7.png", "/cuadro8.png",
-  "/cuadro9.png", "/cuadro10.png", "/cuadro11.png", "/cuadro12.png",
-  "/cuadro13.png", "/cuadro14.png",
+  "/cuadro1.webp", "/cuadro2.webp", "/cuadro3.webp", "/cuadro4.webp",
+  "/cuadro5.webp", "/cuadro6.webp", "/cuadro7.webp", "/cuadro8.webp",
+  "/cuadro9.webp", "/cuadro10.webp", "/cuadro11.webp", "/cuadro12.webp",
+  "/cuadro13.webp", "/cuadro14.webp",
 ];
 
-// Shuffle and assign images randomly to 20 rows (left + right), with cursed rotations
-function shuffleImages(): {
+// Fixed zigzag order: paintings 1→14, paired left/right on each row
+// Row 1: cuadro1 (left) + cuadro2 (right), Row 2: cuadro3 (left) + cuadro4 (right), …
+const PAINTING_ROWS: {
   left: string;
   right: string;
   leftRot: number;
   rightRot: number;
-}[] {
-  // Create a pool of 40 images
-  const pool: string[] = [];
-  while (pool.length < 40) {
-    pool.push(...PAINTING_IMAGES);
-  }
-  // Fisher-Yates shuffle
-  for (let i = pool.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [pool[i], pool[j]] = [pool[j], pool[i]];
-  }
-  const rows: {
-    left: string;
-    right: string;
-    leftRot: number;
-    rightRot: number;
-  }[] = [];
-  for (let i = 0; i < 20; i++) {
-    rows.push({
-      left: pool[i * 2],
-      right: pool[i * 2 + 1],
-      leftRot: (Math.random() - 0.5) * 4, // -2 to +2 degrees
-      rightRot: (Math.random() - 0.5) * 4,
-    });
-  }
-  return rows;
+}[] = [];
+for (let i = 0; i < PAINTING_IMAGES.length; i += 2) {
+  PAINTING_ROWS.push({
+    left: PAINTING_IMAGES[i],
+    right: PAINTING_IMAGES[i + 1] ?? PAINTING_IMAGES[0], // fallback if odd count
+    leftRot: ((i % 5) - 2) * 0.8,
+    rightRot: (((i + 1) % 5) - 2) * 0.8,
+  });
 }
-
-const PAINTING_ROWS = shuffleImages();
 
 const TOTAL_ROWS = PAINTING_ROWS.length;
 const ROW_DEPTH = 500;
 const LOOP_LENGTH = TOTAL_ROWS * ROW_DEPTH;
 const SPEED = 55; // px/s
 
-// 3 copies of the corridor so we can start in the middle copy
-// and always have paintings visible ahead and behind
-const COPIES = 3;
-const CORRIDOR_LENGTH = LOOP_LENGTH * COPIES;
+// Copies are set dynamically based on device (3 desktop, 1 mobile)
+// to reduce memory pressure on mobile devices
 
 const CORRIDOR_WIDTH = 800;
 const CORRIDOR_HEIGHT = 500;
@@ -78,6 +57,8 @@ function Painting({
   posY: number;
   rot: number;
 }) {
+  // Skip rendering when this side has no painting (zigzag pattern)
+  if (!src) return null;
   return (
     <div
       style={{
@@ -101,6 +82,13 @@ function Painting({
         <img
           src={src}
           alt=""
+          loading="lazy"
+          decoding="async"
+          fetchPriority="low"
+          onError={(e) => {
+            // Hide broken images gracefully
+            (e.currentTarget.parentElement as HTMLElement).style.visibility = "hidden";
+          }}
           style={{
             width: `${PAINTING_SIZE}px`,
             height: `${PAINTING_SIZE}px`,
@@ -125,6 +113,10 @@ export default function Home() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [ready, setReady] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+
+  // Reduce corridor copies on mobile to lower memory pressure
+  const copies = isMobile ? 1 : 3;
+  const corridorLength = LOOP_LENGTH * copies;
 
   // Detect mobile / portrait screens
   useEffect(() => {
@@ -204,7 +196,7 @@ export default function Home() {
     depth: number;
   }[] = [];
 
-  for (let copy = 0; copy < COPIES; copy++) {
+  for (let copy = 0; copy < copies; copy++) {
     for (let i = 0; i < TOTAL_ROWS; i++) {
       allPaintings.push({
         leftSrc: PAINTING_ROWS[i].left,
@@ -262,7 +254,7 @@ export default function Home() {
             style={{
               position: "absolute",
               width: `${CORRIDOR_WIDTH * 1.5}px`,
-              height: `${CORRIDOR_LENGTH}px`,
+              height: `${corridorLength}px`,
               backgroundImage: `
                 linear-gradient(90deg, #001a00 0%, rgba(15,125,9,0.95) 20%, rgba(31,250,19,1) 50%, rgba(15,125,9,0.95) 80%, #001a00 100%),
                 repeating-linear-gradient(0deg, rgba(0,0,0,0.9) 0px, rgba(255,255,255,0.08) 200px, rgba(0,0,0,0.9) 400px)
@@ -271,7 +263,7 @@ export default function Home() {
               transform: `rotateX(-90deg) translateZ(-${CORRIDOR_HEIGHT / 2}px)`,
               transformOrigin: "center center",
               left: `-${(CORRIDOR_WIDTH * 1.5) / 2}px`,
-              top: `-${CORRIDOR_LENGTH}px`,
+              top: `-${corridorLength}px`,
               boxShadow: "0 20px 50px rgba(0,0,0,0.8)",
             }}
           >
@@ -298,7 +290,7 @@ export default function Home() {
             style={{
               position: "absolute",
               width: `${CORRIDOR_WIDTH * 1.5}px`,
-              height: `${CORRIDOR_LENGTH}px`,
+              height: `${corridorLength}px`,
               backgroundColor: "#001a00",
               backgroundImage: `
                 linear-gradient(90deg, #001a00 0%, rgba(15,125,9,0.9) 20%, rgba(31,250,19,1) 50%, rgba(15,125,9,0.9) 80%, #001a00 100%),
@@ -308,7 +300,7 @@ export default function Home() {
               transform: `rotateX(90deg) translateZ(${CORRIDOR_HEIGHT / 2}px)`,
               transformOrigin: "center center",
               left: `-${(CORRIDOR_WIDTH * 1.5) / 2}px`,
-              top: `-${CORRIDOR_LENGTH}px`,
+              top: `-${corridorLength}px`,
               boxShadow: "0 -20px 50px rgba(0,0,0,0.8)",
             }}
           />
@@ -317,7 +309,7 @@ export default function Home() {
           <div
             style={{
               position: "absolute",
-              width: `${CORRIDOR_LENGTH}px`,
+              width: `${corridorLength}px`,
               height: `${CORRIDOR_HEIGHT * 0.6}px`,
               backgroundImage: `
                 linear-gradient(180deg, #001a00 0%, rgba(15,125,9,0.95) 20%, rgba(31,250,19,1) 50%, rgba(15,125,9,0.95) 80%, #001a00 100%),
@@ -326,7 +318,7 @@ export default function Home() {
               backgroundBlendMode: "overlay",
               transform: `rotateY(90deg) translateZ(-${CORRIDOR_WIDTH / 2}px)`,
               transformOrigin: "center center",
-              left: `-${CORRIDOR_LENGTH / 2}px`,
+              left: `-${corridorLength / 2}px`,
               top: `-${(CORRIDOR_HEIGHT * 0.6) / 2}px`,
               boxShadow: "0 20px 50px rgba(0,0,0,0.8)",
             }}
@@ -346,7 +338,7 @@ export default function Home() {
           <div
             style={{
               position: "absolute",
-              width: `${CORRIDOR_LENGTH}px`,
+              width: `${corridorLength}px`,
               height: `${CORRIDOR_HEIGHT * 0.6}px`,
               backgroundImage: `
                 linear-gradient(180deg, #001a00 0%, rgba(15,125,9,0.95) 20%, rgba(31,250,19,1) 50%, rgba(15,125,9,0.95) 80%, #001a00 100%),
@@ -355,7 +347,7 @@ export default function Home() {
               backgroundBlendMode: "overlay",
               transform: `rotateY(-90deg) translateZ(-${CORRIDOR_WIDTH / 2}px)`,
               transformOrigin: "center center",
-              left: `-${CORRIDOR_LENGTH / 2}px`,
+              left: `-${corridorLength / 2}px`,
               top: `-${(CORRIDOR_HEIGHT * 0.6) / 2}px`,
               boxShadow: "0 20px 50px rgba(0,0,0,0.8)",
             }}
@@ -364,7 +356,7 @@ export default function Home() {
               <Painting
                 key={`right-${i}`}
                 src={p.rightSrc}
-                posX={CORRIDOR_LENGTH - p.depth}
+                posX={corridorLength - p.depth}
                 posY={(CORRIDOR_HEIGHT * 0.6) / 2}
                 rot={p.rightRot}
               />
@@ -394,7 +386,7 @@ export default function Home() {
               playsInline
               // @ts-ignore — webkit vendor attribute for older iOS
               webkit-playsinline=""
-              preload="metadata"
+              preload={isMobile ? "none" : "metadata"}
               controls={false}
               disablePictureInPicture
               style={{
