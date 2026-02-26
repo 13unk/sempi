@@ -10,9 +10,14 @@ const PAINTING_IMAGES = [
   "/cuadro13.png", "/cuadro14.png",
 ];
 
-// Shuffle and assign images randomly to 20 rows (left + right)
-function shuffleImages(): { left: string; right: string }[] {
-  // Create a pool of 40 images by repeating the 14 enough times
+// Shuffle and assign images randomly to 20 rows (left + right), with cursed rotations
+function shuffleImages(): {
+  left: string;
+  right: string;
+  leftRot: number;
+  rightRot: number;
+}[] {
+  // Create a pool of 40 images
   const pool: string[] = [];
   while (pool.length < 40) {
     pool.push(...PAINTING_IMAGES);
@@ -22,9 +27,19 @@ function shuffleImages(): { left: string; right: string }[] {
     const j = Math.floor(Math.random() * (i + 1));
     [pool[i], pool[j]] = [pool[j], pool[i]];
   }
-  const rows: { left: string; right: string }[] = [];
+  const rows: {
+    left: string;
+    right: string;
+    leftRot: number;
+    rightRot: number;
+  }[] = [];
   for (let i = 0; i < 20; i++) {
-    rows.push({ left: pool[i * 2], right: pool[i * 2 + 1] });
+    rows.push({
+      left: pool[i * 2],
+      right: pool[i * 2 + 1],
+      leftRot: (Math.random() - 0.5) * 4, // -2 to +2 degrees
+      rightRot: (Math.random() - 0.5) * 4,
+    });
   }
   return rows;
 }
@@ -55,10 +70,12 @@ function Painting({
   src,
   posX,
   posY,
+  rot,
 }: {
   src: string;
   posX: number;
   posY: number;
+  rot: number;
 }) {
   return (
     <div
@@ -66,6 +83,7 @@ function Painting({
         position: "absolute",
         left: `${posX - FRAMED_SIZE / 2}px`,
         top: `${posY - FRAMED_SIZE / 2 - 15}px`,
+        transform: `rotate(${rot}deg)`,
       }}
     >
       <div
@@ -116,18 +134,17 @@ export default function Home() {
   const [sphereRotation, setSphereRotation] = useState(0);
   const initializedRef = useRef(false);
   const speedMultiplierRef = useRef(1);
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
-  // Scroll wheel: up = faster, down = slower
+  // Scroll wheel: up = faster (scrolling down/backwards is disabled)
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
       if (e.deltaY < 0) {
         // Scroll up → speed up
         speedMultiplierRef.current = Math.min(speedMultiplierRef.current + 0.5, 5);
-      } else {
-        // Scroll down → slow down
-        speedMultiplierRef.current = Math.max(speedMultiplierRef.current - 0.3, 0.1);
       }
+      // Scrolling backwards (deltaY > 0) no longer slows it down manually
     };
     window.addEventListener("wheel", handleWheel, { passive: false });
     return () => window.removeEventListener("wheel", handleWheel);
@@ -156,6 +173,14 @@ export default function Home() {
       return next >= LOOP_LENGTH ? next - LOOP_LENGTH : next;
     });
 
+    // Dynamic FOV warp (estiramiento en los bordes)
+    if (wrapperRef.current) {
+      // Normal speed (1x) = 800px perspective
+      // Max speed (5x) = 700px perspective (subtle stretch effect)
+      const p = Math.max(700, 800 - (speedMultiplierRef.current - 1) * 25);
+      wrapperRef.current.style.perspective = `${p}px`;
+    }
+
     animRef.current = requestAnimationFrame(animate);
   }, []);
 
@@ -172,10 +197,11 @@ export default function Home() {
     };
   }, [animate]);
 
-  // Build painting positions across all 3 copies
   const allPaintings: {
     leftSrc: string;
     rightSrc: string;
+    leftRot: number;
+    rightRot: number;
     depth: number;
   }[] = [];
 
@@ -184,6 +210,8 @@ export default function Home() {
       allPaintings.push({
         leftSrc: PAINTING_ROWS[i].left,
         rightSrc: PAINTING_ROWS[i].right,
+        leftRot: PAINTING_ROWS[i].leftRot,
+        rightRot: PAINTING_ROWS[i].rightRot,
         depth: copy * LOOP_LENGTH + i * ROW_DEPTH + ROW_DEPTH / 2,
       });
     }
@@ -191,6 +219,7 @@ export default function Home() {
 
   return (
     <div
+      ref={wrapperRef}
       style={{
         width: "100vw",
         height: "100vh",
@@ -206,6 +235,7 @@ export default function Home() {
     >
       {/* 3D corridor scene */}
       <div
+        className="corridor-scene"
         style={{
           transformStyle: "preserve-3d",
           transform: `translateZ(${cameraZ}px)`,
@@ -214,6 +244,14 @@ export default function Home() {
           height: 0,
         }}
       >
+        <style>{`
+          /* Escalar el escenario en pantallas verticales sin deformar los cuadros */
+          @media (max-aspect-ratio: 1/1) {
+            .corridor-scene {
+              transform: translateZ(${cameraZ}px) scale(2.2) !important;
+            }
+          }
+        `}</style>
         {/* FLOOR — carpet pattern */}
         <div
           style={{
@@ -301,6 +339,7 @@ export default function Home() {
               src={p.leftSrc}
               posX={p.depth}
               posY={CORRIDOR_HEIGHT / 2}
+              rot={p.leftRot}
             />
           ))}
         </div>
@@ -325,6 +364,7 @@ export default function Home() {
               src={p.rightSrc}
               posX={CORRIDOR_LENGTH - p.depth}
               posY={CORRIDOR_HEIGHT / 2}
+              rot={p.rightRot}
             />
           ))}
         </div>
@@ -355,7 +395,7 @@ export default function Home() {
         data-hover="true"
       >
         <span style={{ display: "block", letterSpacing: "8px" }}>ENTRA</span>
-        <span style={{ display: "block", letterSpacing: "14px" }}>Y A ! !</span>
+        <span style={{ display: "block", letterSpacing: "14px" }}>YA ! !</span>
         <style>{`
           @keyframes blink {
             0%, 100% { opacity: 1; }
