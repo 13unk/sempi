@@ -14,10 +14,18 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SEMPI — Digital Excellence",
-  description: "We shape organic interactions and brutalist aesthetics for the brands of tomorrow. SEMPI is a design studio crafting premium digital experiences.",
+  title: "SEMPI - Únete YA !!",
+  description: "CLICK AHORA PARA UNIRTE YA DE YA !!!!",
   icons: {
     icon: "https://i.postimg.cc/JhzS1nwy/icon.png",
+  },
+  openGraph: {
+    title: "SEMPI - Únete YA !!",
+    description: "CLICK AHORA PARA UNIRTE YA DE YA !!!!",
+  },
+  twitter: {
+    title: "SEMPI - Únete YA !!",
+    description: "CLICK AHORA PARA UNIRTE YA DE YA !!!!",
   },
 };
 
