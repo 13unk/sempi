@@ -110,19 +110,6 @@ function Painting({
           }}
         />
       </div>
-      <div
-        style={{
-          position: "absolute",
-          top: "-20px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: "40px",
-          height: "60px",
-          background:
-            "radial-gradient(ellipse, rgba(255,255,230,0.12) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }}
-      />
     </div>
   );
 }
@@ -137,6 +124,15 @@ export default function Home() {
   const speedMultiplierRef = useRef(1);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [ready, setReady] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile / portrait screens
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768 || window.innerHeight > window.innerWidth);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   // Wait for everything to mount, then fade in
   useEffect(() => {
@@ -208,7 +204,8 @@ export default function Home() {
     depth: number;
   }[] = [];
 
-  for (let copy = 0; copy < COPIES; copy++) {
+  const mobileCopies = isMobile ? 1 : COPIES;
+  for (let copy = 0; copy < mobileCopies; copy++) {
     for (let i = 0; i < TOTAL_ROWS; i++) {
       allPaintings.push({
         leftSrc: PAINTING_ROWS[i].left,
@@ -279,7 +276,7 @@ export default function Home() {
               boxShadow: "0 20px 50px rgba(0,0,0,0.8)",
             }}
           >
-            {allPaintings.map((p, i) => (
+            {!isMobile && allPaintings.map((p, i) => (
               <div
                 key={`light-${i}`}
                 style={{
