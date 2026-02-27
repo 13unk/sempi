@@ -134,9 +134,14 @@ export default function Home() {
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  // Preload all painting images before revealing the page
+  // Preload all painting images before revealing the page (skip on mobile)
   useEffect(() => {
     let cancelled = false;
+    if (isMobile) {
+      // On mobile we skip painting images entirely, so reveal immediately
+      setReady(true);
+      return;
+    }
     const preload = async () => {
       await Promise.all(
         PAINTING_IMAGES.map(
@@ -155,7 +160,7 @@ export default function Home() {
     // Safety fallback: show page after 10s even if images haven't loaded
     const fallback = setTimeout(() => { if (!cancelled) setReady(true); }, 10000);
     return () => { cancelled = true; clearTimeout(fallback); };
-  }, []);
+  }, [isMobile]);
 
   // Scrolling disabled per user request
   useEffect(() => {
@@ -244,8 +249,8 @@ export default function Home() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        perspective: "800px",
-        perspectiveOrigin: "50% 50%",
+        perspective: isMobile ? undefined : "800px",
+        perspectiveOrigin: isMobile ? undefined : "50% 50%",
         overflow: "hidden",
         position: "relative",
         opacity: ready ? 1 : 0,
@@ -253,181 +258,259 @@ export default function Home() {
         cursor: "pointer",
       }}
     >
-      {/* 3D corridor scene */}
-      <div className="mobile-scaler" style={{ transformStyle: "preserve-3d" }}>
-        <style>{`
-          /* Escalar el escenario en pantallas verticales sin deformar los cuadros */
-          @media (max-aspect-ratio: 1/1) {
-            .mobile-scaler {
-              transform: scale(0.7) !important;
+      {/* ===== MOBILE LAYOUT: simple 2D strips + video background ===== */}
+      {isMobile && (
+        <>
+          <style>{`
+            @keyframes marquee-left {
+              0%   { transform: translateX(0); }
+              100% { transform: translateX(-50%); }
             }
-          }
-        `}</style>
-        <div
-          className="corridor-scene"
-          style={{
-            transformStyle: "preserve-3d",
-            transform: `translateZ(${cameraZ}px)`,
-            position: "relative",
-            willChange: "transform",
-            width: 0,
-            height: 0,
-          }}
-        >
-          {/* --- TOP RIBBON --- */}
-          <div
-            style={{
-              position: "absolute",
-              width: `${CORRIDOR_WIDTH * 1.5}px`,
-              height: `${corridorLength}px`,
-              backgroundImage: `
-                linear-gradient(90deg, #001a00 0%, rgba(15,125,9,0.95) 20%, rgba(31,250,19,1) 50%, rgba(15,125,9,0.95) 80%, #001a00 100%),
-                repeating-linear-gradient(0deg, rgba(0,0,0,0.9) 0px, rgba(255,255,255,0.08) 200px, rgba(0,0,0,0.9) 400px)
-              `,
-              backgroundBlendMode: "overlay",
-              transform: `rotateX(-90deg) translateZ(-${CORRIDOR_HEIGHT / 2}px)`,
-              transformOrigin: "center center",
-              left: `-${(CORRIDOR_WIDTH * 1.5) / 2}px`,
-              top: `-${corridorLength}px`,
-              boxShadow: "0 20px 50px rgba(0,0,0,0.8)",
-            }}
-          >
-            {!isMobile && allPaintings.map((p, i) => (
-              <div
-                key={`light-${i}`}
-                style={{
-                  position: "absolute",
-                  width: "100px",
-                  height: "16px",
-                  background: "rgba(255,255,240,0.7)",
-                  borderRadius: "8px",
-                  left: "50%",
-                  transform: "translateX(-50%)",
-                  top: `${p.depth - 8}px`,
-                  boxShadow: "0 0 40px 15px rgba(255,255,220,0.15)",
-                }}
-              />
-            ))}
-          </div>
+            @keyframes marquee-right {
+              0%   { transform: translateX(-50%); }
+              100% { transform: translateX(0); }
+            }
+            .mobile-strip {
+              position: absolute;
+              left: 0;
+              width: 100%;
+              overflow: hidden;
+              z-index: 5;
+              pointer-events: none;
+            }
+            .mobile-strip-inner {
+              display: flex;
+              gap: 10px;
+              width: max-content;
+              will-change: transform;
+            }
+            .mobile-strip-inner img {
+              width: 110px;
+              height: 110px;
+              object-fit: cover;
+              border-radius: 4px;
+              border: 2px solid rgba(201,168,76,0.7);
+              flex-shrink: 0;
+            }
+          `}</style>
 
-          {/* --- BOTTOM RIBBON --- */}
-          <div
+          {/* Gigachad as simple fullscreen background */}
+          <video
+            src="https://res.cloudinary.com/dhwd9gz6o/video/upload/v1772072968/gigachad_grab2_kkyhfg.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            // @ts-ignore
+            webkit-playsinline=""
+            preload="none"
+            controls={false}
+            disablePictureInPicture
             style={{
               position: "absolute",
-              width: `${CORRIDOR_WIDTH * 1.5}px`,
-              height: `${corridorLength}px`,
-              backgroundColor: "#001a00",
-              backgroundImage: `
-                linear-gradient(90deg, #001a00 0%, rgba(15,125,9,0.9) 20%, rgba(31,250,19,1) 50%, rgba(15,125,9,0.9) 80%, #001a00 100%),
-                repeating-linear-gradient(0deg, rgba(0,0,0,0.9) 0px, rgba(255,255,255,0.08) 200px, rgba(0,0,0,0.9) 400px)
-              `,
-              backgroundBlendMode: "overlay",
-              transform: `rotateX(90deg) translateZ(${CORRIDOR_HEIGHT / 2}px)`,
-              transformOrigin: "center center",
-              left: `-${(CORRIDOR_WIDTH * 1.5) / 2}px`,
-              top: `-${corridorLength}px`,
-              boxShadow: "0 -20px 50px rgba(0,0,0,0.8)",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              objectPosition: "center",
+              zIndex: 0,
             }}
           />
 
-          {/* --- LEFT RIBBON --- */}
-          <div
-            style={{
-              position: "absolute",
-              width: `${corridorLength}px`,
-              height: `${ribbonHeight}px`,
-              backgroundImage: `
-                linear-gradient(180deg, #001a00 0%, rgba(15,125,9,0.95) 20%, rgba(31,250,19,1) 50%, rgba(15,125,9,0.95) 80%, #001a00 100%),
-                repeating-linear-gradient(90deg, rgba(0,0,0,0.9) 0px, rgba(255,255,255,0.08) 200px, rgba(0,0,0,0.9) 400px)
-              `,
-              backgroundBlendMode: "overlay",
-              transform: `rotateY(90deg) translateZ(-${CORRIDOR_WIDTH / 2}px)`,
-              transformOrigin: "center center",
-              left: `-${corridorLength / 2}px`,
-              top: `-${ribbonHeight / 2}px`,
-              boxShadow: "0 20px 50px rgba(0,0,0,0.8)",
-            }}
-          >
-            {allPaintings.map((p, i) => (
-              <Painting
-                key={`left-${i}`}
-                src={p.leftSrc}
-                posX={p.depth}
-                posY={ribbonHeight / 2}
-                rot={p.leftRot}
-                size={paintingSize}
-                frame={framedSize}
-              />
-            ))}
+          {/* TOP STRIP — scrolls right to left */}
+          <div className="mobile-strip" style={{ top: "5%" }}>
+            <div
+              className="mobile-strip-inner"
+              style={{ animation: "marquee-left 80s linear infinite" }}
+            >
+              {[...PAINTING_IMAGES, ...PAINTING_IMAGES].map((src, i) => (
+                <img key={`top-${i}`} src={src} alt="" loading="lazy" />
+              ))}
+            </div>
           </div>
 
-          {/* --- RIGHT RIBBON --- */}
-          <div
-            style={{
-              position: "absolute",
-              width: `${corridorLength}px`,
-              height: `${ribbonHeight}px`,
-              backgroundImage: `
-                linear-gradient(180deg, #001a00 0%, rgba(15,125,9,0.95) 20%, rgba(31,250,19,1) 50%, rgba(15,125,9,0.95) 80%, #001a00 100%),
-                repeating-linear-gradient(90deg, rgba(0,0,0,0.9) 0px, rgba(255,255,255,0.08) 200px, rgba(0,0,0,0.9) 400px)
-              `,
-              backgroundBlendMode: "overlay",
-              transform: `rotateY(-90deg) translateZ(-${CORRIDOR_WIDTH / 2}px)`,
-              transformOrigin: "center center",
-              left: `-${corridorLength / 2}px`,
-              top: `-${ribbonHeight / 2}px`,
-              boxShadow: "0 20px 50px rgba(0,0,0,0.8)",
-            }}
-          >
-            {allPaintings.map((p, i) => (
-              <Painting
-                key={`right-${i}`}
-                src={p.rightSrc}
-                posX={corridorLength - p.depth}
-                posY={ribbonHeight / 2}
-                rot={p.rightRot}
-                size={paintingSize}
-                frame={framedSize}
-              />
-            ))}
+          {/* BOTTOM STRIP — scrolls left to right */}
+          <div className="mobile-strip" style={{ bottom: "5%" }}>
+            <div
+              className="mobile-strip-inner"
+              style={{ animation: "marquee-right 80s linear infinite" }}
+            >
+              {[...PAINTING_IMAGES, ...PAINTING_IMAGES].map((src, i) => (
+                <img key={`bot-${i}`} src={src} alt="" loading="lazy" />
+              ))}
+            </div>
           </div>
+        </>
+      )}
 
-          {/* BACKGROUND GIGACHAD VIDEO (Always floats HORIZON_DEPTH pixels away from camera) */}
+      {/* ===== DESKTOP LAYOUT: full 3D corridor ===== */}
+      {!isMobile && (
+        <div className="mobile-scaler" style={{ transformStyle: "preserve-3d" }}>
           <div
+            className="corridor-scene"
             style={{
-              position: "absolute",
-              width: `${HORIZON_DEPTH * 1.8}px`,   // Original proportionate size
-              height: `${HORIZON_DEPTH * 1.8}px`,
-              left: `-${(HORIZON_DEPTH * 1.8) / 2}px`,
-              top: `-${(HORIZON_DEPTH * 1.8) / 2}px`,
-              // Push the video slightly down so his eyes (top of video) sit exactly at the Y=0 vanishing point
-              transform: `translateZ(-${cameraZ + HORIZON_DEPTH}px) translateY(450px)`,
-              backgroundColor: "black",
-              zIndex: -1,
-              opacity: 1,
+              transformStyle: "preserve-3d",
+              transform: `translateZ(${cameraZ}px)`,
+              position: "relative",
+              willChange: "transform",
+              width: 0,
+              height: 0,
             }}
           >
-            <video
-              src="https://res.cloudinary.com/dhwd9gz6o/video/upload/v1772072968/gigachad_grab2_kkyhfg.mp4"
-              autoPlay
-              loop
-              muted
-              playsInline
-              // @ts-ignore — webkit vendor attribute for older iOS
-              webkit-playsinline=""
-              preload={isMobile ? "none" : "metadata"}
-              controls={false}
-              disablePictureInPicture
+            {/* --- TOP RIBBON --- */}
+            <div
               style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                objectPosition: "center",
+                position: "absolute",
+                width: `${CORRIDOR_WIDTH * 1.5}px`,
+                height: `${corridorLength}px`,
+                backgroundImage: `
+                linear-gradient(90deg, #001a00 0%, rgba(15,125,9,0.95) 20%, rgba(31,250,19,1) 50%, rgba(15,125,9,0.95) 80%, #001a00 100%),
+                repeating-linear-gradient(0deg, rgba(0,0,0,0.9) 0px, rgba(255,255,255,0.08) 200px, rgba(0,0,0,0.9) 400px)
+              `,
+                backgroundBlendMode: "overlay",
+                transform: `rotateX(-90deg) translateZ(-${CORRIDOR_HEIGHT / 2}px)`,
+                transformOrigin: "center center",
+                left: `-${(CORRIDOR_WIDTH * 1.5) / 2}px`,
+                top: `-${corridorLength}px`,
+                boxShadow: "0 20px 50px rgba(0,0,0,0.8)",
+              }}
+            >
+              {allPaintings.map((p, i) => (
+                <div
+                  key={`light-${i}`}
+                  style={{
+                    position: "absolute",
+                    width: "100px",
+                    height: "16px",
+                    background: "rgba(255,255,240,0.7)",
+                    borderRadius: "8px",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    top: `${p.depth - 8}px`,
+                    boxShadow: "0 0 40px 15px rgba(255,255,220,0.15)",
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* --- BOTTOM RIBBON --- */}
+            <div
+              style={{
+                position: "absolute",
+                width: `${CORRIDOR_WIDTH * 1.5}px`,
+                height: `${corridorLength}px`,
+                backgroundColor: "#001a00",
+                backgroundImage: `
+                linear-gradient(90deg, #001a00 0%, rgba(15,125,9,0.9) 20%, rgba(31,250,19,1) 50%, rgba(15,125,9,0.9) 80%, #001a00 100%),
+                repeating-linear-gradient(0deg, rgba(0,0,0,0.9) 0px, rgba(255,255,255,0.08) 200px, rgba(0,0,0,0.9) 400px)
+              `,
+                backgroundBlendMode: "overlay",
+                transform: `rotateX(90deg) translateZ(${CORRIDOR_HEIGHT / 2}px)`,
+                transformOrigin: "center center",
+                left: `-${(CORRIDOR_WIDTH * 1.5) / 2}px`,
+                top: `-${corridorLength}px`,
+                boxShadow: "0 -20px 50px rgba(0,0,0,0.8)",
               }}
             />
+
+            {/* --- LEFT RIBBON --- */}
+            <div
+              style={{
+                position: "absolute",
+                width: `${corridorLength}px`,
+                height: `${ribbonHeight}px`,
+                backgroundImage: `
+                linear-gradient(180deg, #001a00 0%, rgba(15,125,9,0.95) 20%, rgba(31,250,19,1) 50%, rgba(15,125,9,0.95) 80%, #001a00 100%),
+                repeating-linear-gradient(90deg, rgba(0,0,0,0.9) 0px, rgba(255,255,255,0.08) 200px, rgba(0,0,0,0.9) 400px)
+              `,
+                backgroundBlendMode: "overlay",
+                transform: `rotateY(90deg) translateZ(-${CORRIDOR_WIDTH / 2}px)`,
+                transformOrigin: "center center",
+                left: `-${corridorLength / 2}px`,
+                top: `-${ribbonHeight / 2}px`,
+                boxShadow: "0 20px 50px rgba(0,0,0,0.8)",
+              }}
+            >
+              {allPaintings.map((p, i) => (
+                <Painting
+                  key={`left-${i}`}
+                  src={p.leftSrc}
+                  posX={p.depth}
+                  posY={ribbonHeight / 2}
+                  rot={p.leftRot}
+                  size={paintingSize}
+                  frame={framedSize}
+                />
+              ))}
+            </div>
+
+            {/* --- RIGHT RIBBON --- */}
+            <div
+              style={{
+                position: "absolute",
+                width: `${corridorLength}px`,
+                height: `${ribbonHeight}px`,
+                backgroundImage: `
+                linear-gradient(180deg, #001a00 0%, rgba(15,125,9,0.95) 20%, rgba(31,250,19,1) 50%, rgba(15,125,9,0.95) 80%, #001a00 100%),
+                repeating-linear-gradient(90deg, rgba(0,0,0,0.9) 0px, rgba(255,255,255,0.08) 200px, rgba(0,0,0,0.9) 400px)
+              `,
+                backgroundBlendMode: "overlay",
+                transform: `rotateY(-90deg) translateZ(-${CORRIDOR_WIDTH / 2}px)`,
+                transformOrigin: "center center",
+                left: `-${corridorLength / 2}px`,
+                top: `-${ribbonHeight / 2}px`,
+                boxShadow: "0 20px 50px rgba(0,0,0,0.8)",
+              }}
+            >
+              {allPaintings.map((p, i) => (
+                <Painting
+                  key={`right-${i}`}
+                  src={p.rightSrc}
+                  posX={corridorLength - p.depth}
+                  posY={ribbonHeight / 2}
+                  rot={p.rightRot}
+                  size={paintingSize}
+                  frame={framedSize}
+                />
+              ))}
+            </div>
+
+            {/* BACKGROUND GIGACHAD VIDEO */}
+            <div
+              style={{
+                position: "absolute",
+                width: `${HORIZON_DEPTH * 1.8}px`,
+                height: `${HORIZON_DEPTH * 1.8}px`,
+                left: `-${(HORIZON_DEPTH * 1.8) / 2}px`,
+                top: `-${(HORIZON_DEPTH * 1.8) / 2}px`,
+                transform: `translateZ(-${cameraZ + HORIZON_DEPTH}px) translateY(450px)`,
+                backgroundColor: "black",
+                zIndex: -1,
+                opacity: 1,
+              }}
+            >
+              <video
+                src="https://res.cloudinary.com/dhwd9gz6o/video/upload/v1772072968/gigachad_grab2_kkyhfg.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                // @ts-ignore — webkit vendor attribute for older iOS
+                webkit-playsinline=""
+                preload="metadata"
+                controls={false}
+                disablePictureInPicture
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  objectPosition: "center",
+                }}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* ====== CTA TEXT — always centered ====== */}
       <a
