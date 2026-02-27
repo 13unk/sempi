@@ -317,17 +317,6 @@ export default function Home() {
             }}
           />
 
-          {/* TOP STRIP — scrolls right to left */}
-          <div className="mobile-strip" style={{ top: "5%" }}>
-            <div
-              className="mobile-strip-inner"
-              style={{ animation: "marquee-left 80s linear infinite" }}
-            >
-              {[...PAINTING_IMAGES, ...PAINTING_IMAGES].map((src, i) => (
-                <img key={`top-${i}`} src={src} alt="" loading="lazy" />
-              ))}
-            </div>
-          </div>
 
           {/* BOTTOM STRIP — scrolls left to right */}
           <div className="mobile-strip" style={{ bottom: "5%" }}>
