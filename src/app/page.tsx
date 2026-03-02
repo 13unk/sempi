@@ -15,6 +15,7 @@ const PAINTING_IMAGES = [
   "https://i.postimg.cc/0QnRCP9q/cuadro19.png",
   "https://i.postimg.cc/nr86GrDK/cuadro20.png",
   "https://i.postimg.cc/hGKYsLd5/cuadro21.png",
+  "https://i.postimg.cc/XvNdN8mL/cuadro22.png",
 ];
 
 // Fixed zigzag order: paintings 1→14, paired left/right on each row
