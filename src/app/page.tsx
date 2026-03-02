@@ -8,6 +8,11 @@ const PAINTING_IMAGES = [
   "/cuadro5.webp", "/cuadro6.webp", "/cuadro7.webp", "/cuadro8.webp",
   "/cuadro9.webp", "/cuadro10.webp", "/cuadro11.webp", "/cuadro12.webp",
   "/cuadro13.webp", "/cuadro14.webp",
+  "https://i.postimg.cc/sXsCSvdk/cuadro15.png",
+  "https://i.postimg.cc/C17T4Swz/cuadro16.png",
+  "https://i.postimg.cc/pTCbBRPW/cuadro17.png",
+  "https://i.postimg.cc/W38L7Tsc/cuadro18.png",
+  "https://i.postimg.cc/0QnRCP9q/cuadro19.png"
 ];
 
 // Fixed zigzag order: paintings 1→14, paired left/right on each row
