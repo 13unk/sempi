@@ -6,16 +6,10 @@ import { useEffect, useRef, useState, useCallback } from "react";
 const PAINTING_IMAGES = [
   "/cuadro1.webp", "/cuadro2.webp", "/cuadro3.webp", "/cuadro4.webp",
   "/cuadro5.webp", "/cuadro6.webp", "/cuadro7.webp", "/cuadro8.webp",
-  "/cuadro9.webp", "/cuadro10.webp", "/cuadro11.webp", "/cuadro12.webp",
+  "/cuadro10.webp", "/cuadro11.webp", "/cuadro12.webp",
   "/cuadro13.webp", "/cuadro14.webp",
-  "https://i.postimg.cc/sXsCSvdk/cuadro15.png",
-  "https://i.postimg.cc/C17T4Swz/cuadro16.png",
-  "https://i.postimg.cc/pTCbBRPW/cuadro17.png",
-  "https://i.postimg.cc/W38L7Tsc/cuadro18.png",
-  "https://i.postimg.cc/0QnRCP9q/cuadro19.png",
-  "https://i.postimg.cc/nr86GrDK/cuadro20.png",
-  "https://i.postimg.cc/hGKYsLd5/cuadro21.png",
-  "https://i.postimg.cc/XvNdN8mL/cuadro22.png",
+  "/cuadro15.webp", "/cuadro16.webp", "/cuadro17.webp", "/cuadro18.webp",
+  "/cuadro19.webp", "/cuadro20.webp", "/cuadro21.webp", "/cuadro22.webp",
 ];
 
 // Fixed zigzag order: paintings 1→14, paired left/right on each row
