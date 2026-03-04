@@ -631,10 +631,18 @@ export default function Home() {
               width: "fit-content",
             }}
           >
-            {[11, 33, 44, 47, 57, 59].map((idx) => (
+            {[
+              { id: 1, name: "Marc Badua", code: "#B4DU4", role: "Soldado remoto en tierras canarias investigando actualmente el narcotráfico en las islas.", img: "/soldado1.webp" },
+              { id: 11, code: "#000", role: "Sargento Sempi.", img: null },
+              { id: 33, code: "#000", role: "Sargento Sempi.", img: null },
+              { id: 44, code: "#000", role: "Sargento Sempi.", img: null },
+              { id: 47, code: "#000", role: "Sargento Sempi.", img: null },
+              { id: 57, code: "#000", role: "Sargento Sempi.", img: null },
+              { id: 59, code: "#000", role: "Sargento Sempi.", img: null }
+            ].map((member) => (
               <div
-                key={idx}
-                onClick={() => setSelectedMember(idx)}
+                key={member.id}
+                onClick={() => setSelectedMember(member.id)}
                 style={{
                   width: isMobile ? "80px" : "120px",
                   height: isMobile ? "80px" : "120px",
@@ -652,9 +660,13 @@ export default function Home() {
                 onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.1)"}
                 onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
               >
-                <svg viewBox="0 0 24 24" fill="#333" style={{ width: "80%", height: "80%" }}>
-                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                </svg>
+                {member.img ? (
+                  <img src={member.img} alt={member.name || member.code} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                ) : (
+                  <svg viewBox="0 0 24 24" fill="#333" style={{ width: "80%", height: "80%" }}>
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                  </svg>
+                )}
               </div>
             ))}
           </div>
@@ -689,66 +701,81 @@ export default function Home() {
               cursor: "pointer"
             }}
           >
-            <div
-              onClick={(e) => e.stopPropagation()}
-              style={{
-                background: "linear-gradient(135deg, #0a1f0a 0%, #000 100%)",
-                border: "2px solid #1ffa13",
-                borderRadius: "16px",
-                padding: "40px",
-                width: "90%",
-                maxWidth: "500px",
-                boxShadow: "0 0 40px rgba(31,250,19,0.3)",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: "20px",
-                color: "white",
-                fontFamily: "var(--font-space-grotesk), sans-serif",
-                textAlign: "center" as const,
-                cursor: "default"
-              }}
-            >
-              <div style={{
-                width: "150px",
-                height: "150px",
-                borderRadius: "50%",
-                border: "4px solid #1ffa13",
-                overflow: "hidden",
-                background: "#111",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}>
-                <svg viewBox="0 0 24 24" fill="#333" style={{ width: "80%", height: "80%" }}>
-                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                </svg>
-              </div>
-              <h3 style={{ fontSize: "28px", color: "#1ffa13", margin: 0, letterSpacing: "2px" }}>#000</h3>
-              <p style={{ fontSize: "16px", color: "#aaa", lineHeight: 1.5, margin: 0 }}>
-                Sargento Sempi.
-              </p>
-              <button
-                onClick={() => window.open("https://chat.whatsapp.com/CSWvtoK3lmY1Wlye06FcjK", "_blank")}
+            {[
+              { id: 1, name: "Marc Badua", code: "#B4DU4", role: "Soldado remoto en tierras canarias investigando actualmente el narcotráfico en las islas.", img: "/soldado1.webp" },
+              { id: 11, code: "#000", role: "Sargento Sempi.", img: null },
+              { id: 33, code: "#000", role: "Sargento Sempi.", img: null },
+              { id: 44, code: "#000", role: "Sargento Sempi.", img: null },
+              { id: 47, code: "#000", role: "Sargento Sempi.", img: null },
+              { id: 57, code: "#000", role: "Sargento Sempi.", img: null },
+              { id: 59, code: "#000", role: "Sargento Sempi.", img: null }
+            ].filter(m => m.id === selectedMember).map(member => (
+              <div
+                key={member.id}
+                onClick={(e) => e.stopPropagation()}
                 style={{
-                  marginTop: "15px",
-                  background: "#1ffa13",
-                  color: "#000",
-                  border: "none",
-                  padding: "15px 30px",
-                  fontSize: "18px",
-                  fontWeight: "bold",
-                  borderRadius: "8px",
-                  cursor: "pointer",
-                  boxShadow: "0 0 15px rgba(31,250,19,0.5)",
-                  transition: "all 0.2s"
+                  background: "linear-gradient(135deg, #0a1f0a 0%, #000 100%)",
+                  border: "2px solid #1ffa13",
+                  borderRadius: "16px",
+                  padding: "40px",
+                  width: "90%",
+                  maxWidth: "500px",
+                  boxShadow: "0 0 40px rgba(31,250,19,0.3)",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: "20px",
+                  color: "white",
+                  fontFamily: "var(--font-space-grotesk), sans-serif",
+                  textAlign: "center" as const,
+                  cursor: "default"
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.05)"}
-                onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
               >
-                CONÓCELO !!
-              </button>
-            </div>
+                <div style={{
+                  width: "150px",
+                  height: "150px",
+                  borderRadius: "50%",
+                  border: "4px solid #1ffa13",
+                  overflow: "hidden",
+                  background: "#111",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}>
+                  {member.img ? (
+                    <img src={member.img} alt={member.name || member.code} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  ) : (
+                    <svg viewBox="0 0 24 24" fill="#333" style={{ width: "80%", height: "80%" }}>
+                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                    </svg>
+                  )}
+                </div>
+                <h3 style={{ fontSize: "28px", color: "#1ffa13", margin: 0, letterSpacing: "2px" }}>{member.code}</h3>
+                <p style={{ fontSize: "16px", color: "#aaa", lineHeight: 1.5, margin: 0 }}>
+                  {member.role}
+                </p>
+                <button
+                  onClick={() => window.open("https://chat.whatsapp.com/CSWvtoK3lmY1Wlye06FcjK", "_blank")}
+                  style={{
+                    marginTop: "15px",
+                    background: "#1ffa13",
+                    color: "#000",
+                    border: "none",
+                    padding: "15px 30px",
+                    fontSize: "18px",
+                    fontWeight: "bold",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    boxShadow: "0 0 15px rgba(31,250,19,0.5)",
+                    transition: "all 0.2s"
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.05)"}
+                  onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
+                >
+                  CONÓCELO !!
+                </button>
+              </div>
+            ))}
             <style>{`
               @keyframes fadeIn {
                 from { opacity: 0; transform: scale(0.95); }
