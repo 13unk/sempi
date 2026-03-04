@@ -119,6 +119,11 @@ export default function Home() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [ready, setReady] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [soldado1Img, setSoldado1Img] = useState<string>("/soldado1.webp");
+
+  useEffect(() => {
+    setSoldado1Img(Math.random() > 0.5 ? "/soldado1b.webp" : "/soldado1.webp");
+  }, []);
 
   // Reduce corridor copies on mobile to lower memory pressure
   const copies = isMobile ? 2 : 3;
@@ -632,7 +637,7 @@ export default function Home() {
             }}
           >
             {[
-              { id: 1, name: "Marc Badua", code: "#B4DU4", role: "Soldado remoto en tierras canarias investigando actualmente el narcotráfico en las islas.", img: "/soldado1.webp" },
+              { id: 1, name: "Marc Badua", code: "#B4DU4", role: "Soldado remoto en tierras canarias investigando actualmente el narcotráfico en las islas.", img: soldado1Img },
               { id: 11, code: "#000", role: "Sargento Sempi.", img: null },
               { id: 33, code: "#000", role: "Sargento Sempi.", img: null },
               { id: 44, code: "#000", role: "Sargento Sempi.", img: null },
@@ -702,7 +707,7 @@ export default function Home() {
             }}
           >
             {[
-              { id: 1, name: "Marc Badua", code: "#B4DU4", role: "Soldado remoto en tierras canarias investigando actualmente el narcotráfico en las islas.", img: "/soldado1.webp" },
+              { id: 1, name: "Marc Badua", code: "#B4DU4", role: "Soldado remoto en tierras canarias investigando actualmente el narcotráfico en las islas.", img: soldado1Img },
               { id: 11, code: "#000", role: "Sargento Sempi.", img: null },
               { id: 33, code: "#000", role: "Sargento Sempi.", img: null },
               { id: 44, code: "#000", role: "Sargento Sempi.", img: null },
