@@ -2,18 +2,9 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 
-// 33 new remote images
-const PAINTING_IMAGES = [
-  "/cuadronew1.webp", "/cuadronew2.webp", "/cuadronew3.webp", "/cuadronew4.webp",
-  "/cuadronew5.webp", "/cuadronew6.webp", "/cuadronew7.webp", "/cuadronew8.webp",
-  "/cuadronew9.webp", "/cuadronew10.webp", "/cuadronew11.webp", "/cuadronew12.webp",
-  "/cuadronew13.webp", "/cuadronew14.webp", "/cuadronew15.webp", "/cuadronew16.webp",
-  "/cuadronew17.webp", "/cuadronew18.webp", "/cuadronew19.webp", "/cuadronew20.webp",
-  "/cuadronew21.webp", "/cuadronew22.webp", "/cuadronew23.webp", "/cuadronew24.webp",
-  "/cuadronew25.webp", "/cuadronew26.webp", "/cuadronew27.webp", "/cuadronew28.webp",
-  "/cuadronew29.webp", "/cuadronew30.webp", "/cuadronew31.webp", "/cuadronew32.webp",
-  "/cuadronew33.webp"
-];
+// Solo 2 imágenes en bucle
+const BASE_IMAGES = ["/cuadro_loop_1.png", "/cuadro_loop_2.jpg"];
+const PAINTING_IMAGES = Array.from({ length: 32 }, (_, i) => BASE_IMAGES[i % 2]);
 
 // Fixed zigzag order: paintings 1→14, paired left/right on each row
 // Row 1: cuadro1 (left) + cuadro2 (right), Row 2: cuadro3 (left) + cuadro4 (right), …
