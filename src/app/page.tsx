@@ -2,15 +2,17 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 
-// 14 painting images (WebP for smaller file size)
+// 33 new remote images
 const PAINTING_IMAGES = [
-  "/cuadro1.webp", "/cuadro2.webp", "/cuadro3.webp", "/cuadro4.webp",
-  "/cuadro5.webp", "/cuadro6.webp", "/cuadro7.webp", "/cuadro8.webp",
-  "/cuadro10.webp", "/cuadro11.webp", "/cuadro12.webp",
-  "/cuadro13.webp", "/cuadro14.webp",
-  "/cuadro15.webp", "/cuadro16.webp", "/cuadro17.webp", "/cuadro18.webp",
-  "/cuadro19.webp", "/cuadro20.webp", "/cuadro21.webp", "/cuadro22.webp",
-  "/cuadro23.webp",
+  "/cuadronew1.webp", "/cuadronew2.webp", "/cuadronew3.webp", "/cuadronew4.webp",
+  "/cuadronew5.webp", "/cuadronew6.webp", "/cuadronew7.webp", "/cuadronew8.webp",
+  "/cuadronew9.webp", "/cuadronew10.webp", "/cuadronew11.webp", "/cuadronew12.webp",
+  "/cuadronew13.webp", "/cuadronew14.webp", "/cuadronew15.webp", "/cuadronew16.webp",
+  "/cuadronew17.webp", "/cuadronew18.webp", "/cuadronew19.webp", "/cuadronew20.webp",
+  "/cuadronew21.webp", "/cuadronew22.webp", "/cuadronew23.webp", "/cuadronew24.webp",
+  "/cuadronew25.webp", "/cuadronew26.webp", "/cuadronew27.webp", "/cuadronew28.webp",
+  "/cuadronew29.webp", "/cuadronew30.webp", "/cuadronew31.webp", "/cuadronew32.webp",
+  "/cuadronew33.webp"
 ];
 
 // Fixed zigzag order: paintings 1→14, paired left/right on each row
@@ -99,7 +101,7 @@ function Painting({
           style={{
             width: `${size}px`,
             height: `${size}px`,
-            objectFit: "cover",
+            objectFit: "fill",
             borderRadius: "1px",
             display: "block",
           }}
@@ -341,7 +343,7 @@ export default function Home() {
             .mobile-strip-inner img {
               width: 110px;
               height: 110px;
-              object-fit: cover;
+              object-fit: fill;
               border-radius: 4px;
               border: 2px solid rgba(201,168,76,0.7);
               flex-shrink: 0;
