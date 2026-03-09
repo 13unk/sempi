@@ -337,7 +337,7 @@ export default function Home() {
         ref={wrapperRef}
         onClick={() => {
           if (!isMembers) {
-            window.open("https://chat.whatsapp.com/CSWvtoK3lmY1Wlye06FcjK", "_blank");
+            window.open("https://chat.whatsapp.com/GLcsipQAB8ODPO8DPljVbu", "_blank");
           }
         }}
         style={{
@@ -600,7 +600,7 @@ export default function Home() {
 
         {/* ====== CTA TEXT & MEMBERS SECTION ====== */}
         <a
-          href="https://chat.whatsapp.com/CSWvtoK3lmY1Wlye06FcjK"
+          href="https://chat.whatsapp.com/GLcsipQAB8ODPO8DPljVbu"
           target="_blank"
           rel="noopener noreferrer"
           className="cta-text"
