@@ -684,7 +684,7 @@ export default function Home() {
             {[
               { id: 1, name: "Marc Badua", code: "#B4DU4", role: "Soldado remoto en tierras canarias investigando actualmente el narcotráfico en las islas.", img: soldado1Img },
               { id: 2, code: "#T3MPL4R10", role: "Agente del CNI encubierto. Clon hecho a partir de semen de A.R. hallado en un calcetín.", img: "https://i.postimg.cc/jdPMhp6c/soldado2b.jpg" },
-              { id: 33, code: "#000", role: "Sargento Sempi.", img: null },
+              { id: 3, code: "#FVNC10N-AR10", role: "Poseedor del título de bestia mediterránea. Único soldado capaz de llevar el casco por dentro de la piel.", img: "https://i.postimg.cc/nz1H7RRb/soldado3.png" },
               { id: 44, code: "#000", role: "Sargento Sempi.", img: null },
               { id: 47, code: "#000", role: "Sargento Sempi.", img: null },
               { id: 57, code: "#000", role: "Sargento Sempi.", img: null },
@@ -754,7 +754,7 @@ export default function Home() {
             {[
               { id: 1, name: "Marc Badua", code: "#B4DU4", role: "Soldado remoto en tierras canarias investigando actualmente el narcotráfico en las islas.", img: soldado1Img },
               { id: 2, code: "#T3MPL4R10", role: "Agente del CNI encubierto. Clon hecho a partir de semen de A.R. hallado en un calcetín.", img: "https://i.postimg.cc/jdPMhp6c/soldado2b.jpg" },
-              { id: 33, code: "#000", role: "Sargento Sempi.", img: null },
+              { id: 3, code: "#FVNC10N-AR10", role: "Poseedor del título de bestia mediterránea. Único soldado capaz de llevar el casco por dentro de la piel.", img: "https://i.postimg.cc/nz1H7RRb/soldado3.png" },
               { id: 44, code: "#000", role: "Sargento Sempi.", img: null },
               { id: 47, code: "#000", role: "Sargento Sempi.", img: null },
               { id: 57, code: "#000", role: "Sargento Sempi.", img: null },
