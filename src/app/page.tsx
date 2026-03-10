@@ -683,7 +683,7 @@ export default function Home() {
           >
             {[
               { id: 1, name: "Marc Badua", code: "#B4DU4", role: "Soldado remoto en tierras canarias investigando actualmente el narcotráfico en las islas.", img: soldado1Img },
-              { id: 11, code: "#000", role: "Sargento Sempi.", img: null },
+              { id: 2, code: "#T3MPL4R10", role: "Agente del CNI encubierto. Clon hecho a partir de semen de A.R. hallado en un calcetín.", img: "https://i.postimg.cc/44M6qW47/soldado2.png" },
               { id: 33, code: "#000", role: "Sargento Sempi.", img: null },
               { id: 44, code: "#000", role: "Sargento Sempi.", img: null },
               { id: 47, code: "#000", role: "Sargento Sempi.", img: null },
@@ -753,7 +753,7 @@ export default function Home() {
           >
             {[
               { id: 1, name: "Marc Badua", code: "#B4DU4", role: "Soldado remoto en tierras canarias investigando actualmente el narcotráfico en las islas.", img: soldado1Img },
-              { id: 11, code: "#000", role: "Sargento Sempi.", img: null },
+              { id: 2, code: "#T3MPL4R10", role: "Agente del CNI encubierto. Clon hecho a partir de semen de A.R. hallado en un calcetín.", img: "https://i.postimg.cc/44M6qW47/soldado2.png" },
               { id: 33, code: "#000", role: "Sargento Sempi.", img: null },
               { id: 44, code: "#000", role: "Sargento Sempi.", img: null },
               { id: 47, code: "#000", role: "Sargento Sempi.", img: null },
