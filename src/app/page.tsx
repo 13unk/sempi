@@ -302,9 +302,9 @@ export default function Home() {
   useEffect(() => {
     if (!initializedRef.current) {
       initializedRef.current = true;
-      // Start at a random position mid-corridor
-      const randomStart = Math.floor(Math.random() * TOTAL_ROWS) * ROW_DEPTH;
-      setCameraZ(randomStart);
+      // Start at a random position mid-corridor, offset by 150px to prevent viewport screen edge clipping
+      const randomStart = Math.floor(Math.random() * TOTAL_ROWS) * ROW_DEPTH - 150;
+      setCameraZ(Math.max(0, randomStart)); // Ensure we don't start negative
     }
     animRef.current = requestAnimationFrame(animate);
     return () => {
@@ -362,10 +362,10 @@ export default function Home() {
             <style>{`
             @keyframes marquee-left {
               0%   { transform: translateX(0); }
-              100% { transform: translateX(-50%); }
+              100% { transform: translateX(calc(-50% - 5px)); }
             }
             @keyframes marquee-right {
-              0%   { transform: translateX(-50%); }
+              0%   { transform: translateX(calc(-50% - 5px)); }
               100% { transform: translateX(0); }
             }
             .mobile-strip {
@@ -452,7 +452,7 @@ export default function Home() {
                   height: `${corridorLength}px`,
                   backgroundImage: `
                 linear-gradient(90deg, #001a00 0%, rgba(15,125,9,0.95) 20%, rgba(31,250,19,1) 50%, rgba(15,125,9,0.95) 80%, #001a00 100%),
-                repeating-linear-gradient(0deg, rgba(0,0,0,0.9) 0px, rgba(255,255,255,0.08) 200px, rgba(0,0,0,0.9) 400px)
+                repeating-linear-gradient(0deg, rgba(0,0,0,0.9) 0px, rgba(255,255,255,0.08) 250px, rgba(0,0,0,0.9) 500px)
               `,
                   backgroundBlendMode: "overlay",
                   transform: `rotateX(-90deg) translateZ(-${CORRIDOR_HEIGHT / 2}px)`,
@@ -489,7 +489,7 @@ export default function Home() {
                   backgroundColor: "#001a00",
                   backgroundImage: `
                 linear-gradient(90deg, #001a00 0%, rgba(15,125,9,0.9) 20%, rgba(31,250,19,1) 50%, rgba(15,125,9,0.9) 80%, #001a00 100%),
-                repeating-linear-gradient(0deg, rgba(0,0,0,0.9) 0px, rgba(255,255,255,0.08) 200px, rgba(0,0,0,0.9) 400px)
+                repeating-linear-gradient(0deg, rgba(0,0,0,0.9) 0px, rgba(255,255,255,0.08) 250px, rgba(0,0,0,0.9) 500px)
               `,
                   backgroundBlendMode: "overlay",
                   transform: `rotateX(90deg) translateZ(${CORRIDOR_HEIGHT / 2}px)`,
@@ -508,7 +508,7 @@ export default function Home() {
                   height: `${ribbonHeight}px`,
                   backgroundImage: `
                 linear-gradient(180deg, #001a00 0%, rgba(15,125,9,0.95) 20%, rgba(31,250,19,1) 50%, rgba(15,125,9,0.95) 80%, #001a00 100%),
-                repeating-linear-gradient(90deg, rgba(0,0,0,0.9) 0px, rgba(255,255,255,0.08) 200px, rgba(0,0,0,0.9) 400px)
+                repeating-linear-gradient(90deg, rgba(0,0,0,0.9) 0px, rgba(255,255,255,0.08) 250px, rgba(0,0,0,0.9) 500px)
               `,
                   backgroundBlendMode: "overlay",
                   transform: `rotateY(90deg) translateZ(-${CORRIDOR_WIDTH / 2}px)`,
@@ -539,7 +539,7 @@ export default function Home() {
                   height: `${ribbonHeight}px`,
                   backgroundImage: `
                 linear-gradient(180deg, #001a00 0%, rgba(15,125,9,0.95) 20%, rgba(31,250,19,1) 50%, rgba(15,125,9,0.95) 80%, #001a00 100%),
-                repeating-linear-gradient(90deg, rgba(0,0,0,0.9) 0px, rgba(255,255,255,0.08) 200px, rgba(0,0,0,0.9) 400px)
+                repeating-linear-gradient(90deg, rgba(0,0,0,0.9) 0px, rgba(255,255,255,0.08) 250px, rgba(0,0,0,0.9) 500px)
               `,
                   backgroundBlendMode: "overlay",
                   transform: `rotateY(-90deg) translateZ(-${CORRIDOR_WIDTH / 2}px)`,
