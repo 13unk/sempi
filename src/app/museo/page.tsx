@@ -31,7 +31,7 @@ export default function Museo() {
           gap: 10px;
           max-width: 1200px;
           margin: 0 auto;
-          width: 100%;
+          width: 90%;
         }
         @media (min-width: 600px) {
           .museo-title {
