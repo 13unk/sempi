@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 
-const WHATSAPP_LINK = "https://chat.whatsapp.com/ENh6UhRxkRHIs6Nb242L7X?mode=gi_t";
+const WHATSAPP_LINK = "https://chat.whatsapp.com/LLd2CSnjlRj77ZBn60v2ve";
 
 const PAINTING_IMAGES = [
   "https://i.postimg.cc/nzCSxMy1/cuadro52.png",
