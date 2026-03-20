@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 
+const WHATSAPP_LINK = "https://chat.whatsapp.com/ENh6UhRxkRHIs6Nb242L7X?mode=gi_t";
+
 const PAINTING_IMAGES = [
   "https://i.postimg.cc/nzCSxMy1/cuadro52.png",
   "https://i.postimg.cc/85qrB3dc/cuadro1.png",
@@ -338,7 +340,7 @@ export default function Home() {
         ref={wrapperRef}
         onClick={() => {
           if (!isMembers) {
-            window.open("https://chat.whatsapp.com/ENh6UhRxkRHIs6Nb242L7X?mode=gi_t", "_blank");
+            window.open(WHATSAPP_LINK, "_blank");
           }
         }}
         style={{
@@ -601,7 +603,7 @@ export default function Home() {
 
         {/* ====== CTA TEXT & MEMBERS SECTION ====== */}
         <a
-          href="https://chat.whatsapp.com/ENh6UhRxkRHIs6Nb242L7X?mode=gi_t"
+          href={WHATSAPP_LINK}
           target="_blank"
           rel="noopener noreferrer"
           className="cta-text"
@@ -809,7 +811,7 @@ export default function Home() {
                   {member.role}
                 </p>
                 <button
-                  onClick={() => window.open("https://chat.whatsapp.com/GLcsipQAB8ODPO8DPljVbu", "_blank")}
+                  onClick={() => window.open(WHATSAPP_LINK, "_blank")}
                   style={{
                     marginTop: "15px",
                     background: "#1ffa13",
