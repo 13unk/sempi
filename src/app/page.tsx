@@ -504,67 +504,42 @@ export default function Home() {
                 }}
               />
 
-              {/* --- LEFT RIBBON --- */}
-              <div
-                style={{
-                  position: "absolute",
-                  width: `${corridorLength}px`,
-                  height: `${ribbonHeight}px`,
-                  backgroundImage: `
-                linear-gradient(180deg, #001a00 0%, rgba(15,125,9,0.95) 20%, rgba(31,250,19,1) 50%, rgba(15,125,9,0.95) 80%, #001a00 100%),
-                repeating-linear-gradient(90deg, rgba(0,0,0,0.9) 0px, rgba(255,255,255,0.08) 250px, rgba(0,0,0,0.9) 500px)
-              `,
-                  backgroundBlendMode: "overlay",
-                  transform: `rotateY(90deg) translateZ(-${CORRIDOR_WIDTH / 2}px)`,
-                  transformOrigin: "center center",
-                  left: `-${corridorLength / 2}px`,
-                  top: `-${ribbonHeight / 2}px`,
-                  boxShadow: "0 20px 50px rgba(0,0,0,0.8)",
-                }}
-              >
-                {allPaintings.map((p, i) => (
-                  <Painting
-                    key={`left-${i}`}
-                    src={p.leftSrc}
-                    posX={p.depth}
-                    posY={ribbonHeight / 2}
-                    rot={p.leftRot}
-                    size={paintingSize}
-                    frame={framedSize}
-                  />
-                ))}
-              </div>
-
-              {/* --- RIGHT RIBBON --- */}
-              <div
-                style={{
-                  position: "absolute",
-                  width: `${corridorLength}px`,
-                  height: `${ribbonHeight}px`,
-                  backgroundImage: `
-                linear-gradient(180deg, #001a00 0%, rgba(15,125,9,0.95) 20%, rgba(31,250,19,1) 50%, rgba(15,125,9,0.95) 80%, #001a00 100%),
-                repeating-linear-gradient(90deg, rgba(0,0,0,0.9) 0px, rgba(255,255,255,0.08) 250px, rgba(0,0,0,0.9) 500px)
-              `,
-                  backgroundBlendMode: "overlay",
-                  transform: `rotateY(-90deg) translateZ(-${CORRIDOR_WIDTH / 2}px)`,
-                  transformOrigin: "center center",
-                  left: `-${corridorLength / 2}px`,
-                  top: `-${ribbonHeight / 2}px`,
-                  boxShadow: "0 20px 50px rgba(0,0,0,0.8)",
-                }}
-              >
-                {allPaintings.map((p, i) => (
-                  <Painting
-                    key={`right-${i}`}
-                    src={p.rightSrc}
-                    posX={corridorLength - p.depth}
-                    posY={ribbonHeight / 2}
-                    rot={p.rightRot}
-                    size={paintingSize}
-                    frame={framedSize}
-                  />
-                ))}
-              </div>
+              {/* --- RIBBONS (LEFT & RIGHT) --- */}
+              {["left", "right"].map((side) => {
+                const isLeft = side === "left";
+                return (
+                  <div
+                    key={side}
+                    style={{
+                      position: "absolute",
+                      width: `${corridorLength}px`,
+                      height: `${ribbonHeight}px`,
+                      backgroundImage: `
+                        linear-gradient(180deg, #001a00 0%, rgba(15,125,9,0.95) 20%, rgba(31,250,19,1) 50%, rgba(15,125,9,0.95) 80%, #001a00 100%),
+                        repeating-linear-gradient(90deg, rgba(0,0,0,0.9) 0px, rgba(255,255,255,0.08) 250px, rgba(0,0,0,0.9) 500px)
+                      `,
+                      backgroundBlendMode: "overlay",
+                      transform: `rotateY(${isLeft ? 90 : -90}deg) translateZ(-${CORRIDOR_WIDTH / 2}px)`,
+                      transformOrigin: "center center",
+                      left: `-${corridorLength / 2}px`,
+                      top: `-${ribbonHeight / 2}px`,
+                      boxShadow: "0 20px 50px rgba(0,0,0,0.8)",
+                    }}
+                  >
+                    {allPaintings.map((p, i) => (
+                      <Painting
+                        key={`${side}-${i}`}
+                        src={isLeft ? p.leftSrc : p.rightSrc}
+                        posX={isLeft ? p.depth : corridorLength - p.depth}
+                        posY={ribbonHeight / 2}
+                        rot={isLeft ? p.leftRot : p.rightRot}
+                        size={paintingSize}
+                        frame={framedSize}
+                      />
+                    ))}
+                  </div>
+                );
+              })}
 
               {/* BACKGROUND GIGACHAD VIDEO */}
               <div
