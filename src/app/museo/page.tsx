@@ -26,13 +26,23 @@ export default function Museo() {
         MUSEO SEMPI
       </h1>
       
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-        gap: "20px",
-        maxWidth: "1200px",
-        margin: "0 auto"
-      }}>
+      <style>{`
+        .museo-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 10px;
+          max-width: 1200px;
+          margin: 0 auto;
+        }
+        @media (min-width: 600px) {
+          .museo-grid {
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+          }
+        }
+      `}</style>
+      
+      <div className="museo-grid">
         {PAINTING_IMAGES.map((src, i) => (
           <div 
             key={i}
