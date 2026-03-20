@@ -11,36 +11,44 @@ export default function Museo() {
       height: "100vh", 
       width: "100%", 
       overflowY: "auto",
+      overflowX: "hidden",
       background: "#000", 
       color: "#1ffa13",
-      padding: "40px 20px",
+      padding: "40px 10px",
       fontFamily: "Impact, 'Arial Black', sans-serif"
     }}>
-      <h1 style={{ 
-        textAlign: "center", 
-        fontSize: "48px", 
-        marginBottom: "40px",
-        textShadow: "0 0 20px rgba(31,250,19,0.6)",
-        letterSpacing: "4px"
-      }}>
-        MUSEO SEMPI
-      </h1>
-      
       <style>{`
+        .museo-title {
+          text-align: center;
+          font-size: 32px;
+          margin-bottom: 30px;
+          text-shadow: 0 0 20px rgba(31,250,19,0.6);
+          letter-spacing: 2px;
+        }
         .museo-grid {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           gap: 10px;
           max-width: 1200px;
           margin: 0 auto;
+          width: 100%;
         }
         @media (min-width: 600px) {
+          .museo-title {
+            font-size: 48px;
+            margin-bottom: 40px;
+            letter-spacing: 4px;
+          }
           .museo-grid {
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 20px;
           }
         }
       `}</style>
+
+      <h1 className="museo-title">
+        MUSEO SEMPI
+      </h1>
       
       <div className="museo-grid">
         {PAINTING_IMAGES.map((src, i) => (
