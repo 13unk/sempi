@@ -8,8 +8,9 @@ export default function Museo() {
 
   return (
     <div style={{ 
-      minHeight: "100vh", 
-      width: "100vw", 
+      height: "100vh", 
+      width: "100%", 
+      overflowY: "auto",
       background: "#000", 
       color: "#1ffa13",
       padding: "40px 20px",
