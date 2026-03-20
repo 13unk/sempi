@@ -1,65 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-
-const WHATSAPP_LINK = "https://chat.whatsapp.com/LLd2CSnjlRj77ZBn60v2ve";
-
-const PAINTING_IMAGES = [
-  "https://i.postimg.cc/q7692Jd1/cuadro53.png",
-  "https://i.postimg.cc/CKnWbhVm/cuadro54.png",
-  "https://i.postimg.cc/nzCSxMy1/cuadro52.png",
-  "https://i.postimg.cc/85qrB3dc/cuadro1.png",
-  "https://i.postimg.cc/rmvtCbGt/cuadro10.png",
-  "https://i.postimg.cc/C1WfHtCq/cuadro11.png",
-  "https://i.postimg.cc/76pTMc1b/cuadro12.png",
-  "https://i.postimg.cc/QtRWkPgH/cuadro13.png",
-  "https://i.postimg.cc/W3QJ6Kmd/cuadro14.png",
-  "https://i.postimg.cc/d3rZWBny/cuadro2.png",
-  "https://i.postimg.cc/wvSscP5V/cuadro3.png",
-  "https://i.postimg.cc/k4ktFZNv/cuadro4.png",
-  "https://i.postimg.cc/1tLNcT0c/cuadro5.png",
-  "https://i.postimg.cc/V63bBT9q/cuadro6.png",
-  "https://i.postimg.cc/mD0FNq33/cuadro7.png",
-  "https://i.postimg.cc/bJK2HM0k/cuadro8.png",
-  "https://i.postimg.cc/Y9JmfVNF/cuadro9.png",
-  "https://i.postimg.cc/sXsCSvdk/cuadro15.png",
-  "https://i.postimg.cc/C17T4Swz/cuadro16.png",
-  "https://i.postimg.cc/pTCbBRPW/cuadro17.png",
-  "https://i.postimg.cc/W38L7Tsc/cuadro18.png",
-  "https://i.postimg.cc/0QnRCP9q/cuadro19.png",
-  "https://i.postimg.cc/nr86GrDK/cuadro20.png",
-  "https://i.postimg.cc/hGKYsLd5/cuadro21.png",
-  "https://i.postimg.cc/XvNdN8mL/cuadro22.png",
-  "https://i.postimg.cc/kGvZRbfd/cuadro23.png",
-  "https://i.postimg.cc/P5PVzx4P/Whats-App-Image-2026-03-04-at-23-02-09.jpg",
-  "https://i.postimg.cc/8zjXB5Hc/Whats-App-Image-2026-03-04-at-23-02-10.jpg",
-  "https://i.postimg.cc/K8RprzN4/Whats-App-Image-2026-03-04-at-23-02-10-(1).jpg",
-  "https://i.postimg.cc/qvzDXRLJ/Whats-App-Image-2026-03-04-at-23-02-10-(2).jpg",
-  "https://i.postimg.cc/GmHgJ2Qc/Whats-App-Image-2026-03-04-at-23-02-11.jpg",
-  "https://i.postimg.cc/pLpcYTZV/Whats-App-Image-2026-03-04-at-23-02-11-(1).jpg",
-  "https://i.postimg.cc/pLpcYTZP/Whats-App-Image-2026-03-04-at-23-02-12.jpg",
-  "https://i.postimg.cc/526Kq031/Whats-App-Image-2026-03-04-at-23-02-12-(1).jpg",
-  "https://i.postimg.cc/sgvH9XcC/Whats-App-Image-2026-03-04-at-23-12-38.jpg",
-  "https://i.postimg.cc/CxzrH1NT/Whats-App-Image-2026-03-04-at-23-12-38-(1).jpg",
-  "https://i.postimg.cc/Mpv3bTYh/Whats-App-Image-2026-03-04-at-23-12-39.jpg",
-  "https://i.postimg.cc/wj74cvkZ/Whats-App-Image-2026-03-04-at-23-12-39-(1).jpg",
-  "https://i.postimg.cc/RZNpQFT2/Whats-App-Image-2026-03-04-at-23-12-42.jpg",
-  "https://i.postimg.cc/tCrmxPhX/Whats-App-Image-2026-03-04-at-23-12-42-(1).jpg",
-  "https://i.postimg.cc/NfNPHT1Y/Whats-App-Image-2026-03-04-at-23-12-43.jpg",
-  "https://i.postimg.cc/xTsFzHKQ/Whats-App-Image-2026-03-04-at-23-12-43-(1).jpg",
-  "https://i.postimg.cc/jd8k7Nzb/Whats-App-Image-2026-03-04-at-23-12-44.jpg",
-  "https://i.postimg.cc/gkMBZRvP/Whats-App-Image-2026-03-04-at-23-12-44-(1).jpg",
-  "https://i.postimg.cc/65H1vRCD/Whats-App-Image-2026-03-04-at-23-12-44-(2).jpg",
-  "https://i.postimg.cc/YqXyWgQZ/Whats-App-Image-2026-03-04-at-23-12-45-(1).jpg",
-  "https://i.postimg.cc/65H1vRC1/Whats-App-Image-2026-03-04-at-23-12-46.jpg",
-  "https://i.postimg.cc/gkMBZR3S/Whats-App-Image-2026-03-04-at-23-12-46-(1).jpg",
-  "https://i.postimg.cc/NfNPHTRC/Whats-App-Image-2026-03-04-at-23-12-46-(2).jpg",
-  "https://i.postimg.cc/pX01F8K0/Whats-App-Image-2026-03-04-at-23-12-47.jpg",
-  "https://i.postimg.cc/ncdwD7q1/Whats-App-Image-2026-03-04-at-23-12-47-(2).jpg",
-  "https://i.postimg.cc/NfNPHTR7/Whats-App-Image-2026-03-04-at-23-12-47-(3).jpg",
-  "https://i.postimg.cc/pX01F8KJ/Whats-App-Image-2026-03-04-at-23-44-57.jpg",
-  "https://i.postimg.cc/4N8F9tp5/Whats-App-Image-2026-03-04-at-23-59-20.jpg"
-];
+import { WHATSAPP_LINK, PAINTING_IMAGES } from "@/constants/images";
 
 // Fixed zigzag order: paintings 1→14, paired left/right on each row
 // Row 1: cuadro1 (left) + cuadro2 (right), Row 2: cuadro3 (left) + cuadro4 (right), …
