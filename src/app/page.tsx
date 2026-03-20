@@ -5,6 +5,8 @@ import { useEffect, useRef, useState, useCallback } from "react";
 const WHATSAPP_LINK = "https://chat.whatsapp.com/LLd2CSnjlRj77ZBn60v2ve";
 
 const PAINTING_IMAGES = [
+  "https://i.postimg.cc/q7692Jd1/cuadro53.png",
+  "https://i.postimg.cc/CKnWbhVm/cuadro54.png",
   "https://i.postimg.cc/nzCSxMy1/cuadro52.png",
   "https://i.postimg.cc/85qrB3dc/cuadro1.png",
   "https://i.postimg.cc/rmvtCbGt/cuadro10.png",
