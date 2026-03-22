@@ -1,6 +1,7 @@
 export const WHATSAPP_LINK = "https://chat.whatsapp.com/LLd2CSnjlRj77ZBn60v2ve";
 
 export const PAINTING_IMAGES = [
+  "https://i.postimg.cc/fLp7qwNd/cuadro55.jpg",
   "https://i.postimg.cc/q7692Jd1/cuadro53.png",
   "https://i.postimg.cc/CKnWbhVm/cuadro54.png",
   "https://i.postimg.cc/nzCSxMy1/cuadro52.png",
