@@ -51,6 +51,19 @@ export default function RootLayout({
           }}
         />
         {/* End Google Tag Manager */}
+        {/* Google tag (gtag.js) */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-HXH5GTHBRE"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-HXH5GTHBRE');
+            `,
+          }}
+        />
+        {/* End Google tag (gtag.js) */}
       </head>
       <body
         className={`${spaceGrotesk.variable} ${geistMono.variable} antialiased bg-[#030303]`}
