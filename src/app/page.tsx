@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { WHATSAPP_LINK, PAINTING_IMAGES } from "@/constants/images";
+import LoadingScreen from "@/components/LoadingScreen";
 
 // Fixed zigzag order: paintings 1→14, paired left/right on each row
 // Row 1: cuadro1 (left) + cuadro2 (right), Row 2: cuadro3 (left) + cuadro4 (right), …
@@ -280,6 +281,7 @@ export default function Home() {
 
   return (
     <div style={{ height: "100vh", width: "100vw", background: "#000", position: "relative", overflow: "hidden" }}>
+      {!ready && <LoadingScreen />}
       <div
         ref={wrapperRef}
         onClick={() => {

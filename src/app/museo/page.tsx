@@ -1,10 +1,30 @@
 "use client";
 
 import { PAINTING_IMAGES } from "@/constants/images";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import LoadingScreen from "@/components/LoadingScreen";
 
 export default function Museo() {
   const [selectedImg, setSelectedImg] = useState<string | null>(null);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const preload = async () => {
+      await Promise.all(
+        PAINTING_IMAGES.map(
+          (src) =>
+            new Promise<void>((resolve) => {
+              const img = new Image();
+              img.onload = () => resolve();
+              img.onerror = () => resolve();
+              img.src = src;
+            })
+        )
+      );
+      setReady(true);
+    };
+    preload();
+  }, []);
 
   return (
     <div style={{ 
@@ -17,6 +37,8 @@ export default function Museo() {
       padding: "40px 10px",
       fontFamily: "Impact, 'Arial Black', sans-serif"
     }}>
+      {!ready && <LoadingScreen />}
+      <div style={{ opacity: ready ? 1 : 0, transition: "opacity 0.8s ease-in" }}>
       <style>{`
         .museo-title {
           text-align: center;
@@ -109,6 +131,7 @@ export default function Museo() {
           />
         </div>
       )}
+      </div>
     </div>
   );
 }
