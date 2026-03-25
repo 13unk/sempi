@@ -117,45 +117,50 @@ export default function Home() {
     setSoldado1Img(Math.random() > 0.5 ? "/soldado1b.webp" : "/soldado1.webp");
   }, []);
 
-  // Reduce corridor copies on mobile to lower memory pressure
-  const copies = isMobile ? 2 : 3;
-  const corridorLength = LOOP_LENGTH * copies;
+    const copies = 2; // Reduced to 2 to avoid browser rendering limits on very large elements
+    const corridorLength = LOOP_LENGTH * copies;
 
-  const paintingSize = PAINTING_SIZE;
-  const framedSize = FRAMED_SIZE;
-  const ribbonHeight = CORRIDOR_HEIGHT * 0.6;
+    const paintingSize = PAINTING_SIZE;
+    const framedSize = FRAMED_SIZE;
+    const ribbonHeight = CORRIDOR_HEIGHT * 0.6;
 
-  // Detect mobile / portrait screens
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768 || window.innerHeight > window.innerWidth);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
+    // Detect mobile / portrait screens
+    useEffect(() => {
+      const check = () => setIsMobile(window.innerWidth < 768 || window.innerHeight > window.innerWidth);
+      check();
+      window.addEventListener("resize", check);
+      return () => window.removeEventListener("resize", check);
+    }, []);
 
-  // Preload all painting images before revealing the page (skip on mobile)
-  useEffect(() => {
-    let cancelled = false;
-    if (isMobile) {
-      // On mobile we skip painting images entirely, so reveal immediately
-      setReady(true);
-      return;
-    }
-    const preload = async () => {
-      await Promise.all(
-        PAINTING_IMAGES.map(
-          (src) =>
-            new Promise<void>((resolve) => {
-              const img = new Image();
-              img.onload = () => resolve();
-              img.onerror = () => resolve(); // don't block on broken images
-              img.src = src;
-            })
-        )
-      );
-      if (!cancelled) setReady(true);
-    };
-    preload();
+    // Preload all painting images before revealing the page (skip on mobile)
+    useEffect(() => {
+      let cancelled = false;
+      if (isMobile) {
+        // On mobile we skip painting images entirely, so reveal immediately
+        setReady(true);
+        return;
+      }
+      const preload = async () => {
+        const startTime = Date.now();
+        await Promise.all(
+          PAINTING_IMAGES.map(
+            (src) =>
+              new Promise<void>((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve();
+                img.onerror = () => resolve(); // don't block on broken images
+                img.src = src;
+              })
+          )
+        );
+        const elapsed = Date.now() - startTime;
+        const minDuration = 2000;
+        if (elapsed < minDuration) {
+          await new Promise(resolve => setTimeout(resolve, minDuration - elapsed));
+        }
+        if (!cancelled) setReady(true);
+      };
+      preload();
     // Safety fallback: show page after 10s even if images haven't loaded
     const fallback = setTimeout(() => { if (!cancelled) setReady(true); }, 10000);
     return () => { cancelled = true; clearTimeout(fallback); };
@@ -474,7 +479,7 @@ export default function Home() {
                       <Painting
                         key={`${side}-${i}`}
                         src={isLeft ? p.leftSrc : p.rightSrc}
-                        posX={isLeft ? p.depth : corridorLength - p.depth}
+                        posX={p.depth}
                         posY={ribbonHeight / 2}
                         rot={isLeft ? p.leftRot : p.rightRot}
                         size={paintingSize}

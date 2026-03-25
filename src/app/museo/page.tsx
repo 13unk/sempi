@@ -10,6 +10,7 @@ export default function Museo() {
 
   useEffect(() => {
     const preload = async () => {
+      const startTime = Date.now();
       await Promise.all(
         PAINTING_IMAGES.map(
           (src) =>
@@ -21,6 +22,11 @@ export default function Museo() {
             })
         )
       );
+      const elapsed = Date.now() - startTime;
+      const minDuration = 2000;
+      if (elapsed < minDuration) {
+        await new Promise(resolve => setTimeout(resolve, minDuration - elapsed));
+      }
       setReady(true);
     };
     preload();
