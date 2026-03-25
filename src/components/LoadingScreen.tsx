@@ -1,6 +1,10 @@
 import React from 'react';
 
-const LoadingScreen: React.FC = () => {
+interface LoadingScreenProps {
+  fadeOut?: boolean;
+}
+
+const LoadingScreen: React.FC<LoadingScreenProps> = ({ fadeOut }) => {
   return (
     <div style={{
       position: 'fixed',
@@ -12,6 +16,9 @@ const LoadingScreen: React.FC = () => {
       justifyContent: 'center',
       zIndex: 9999,
       fontFamily: 'Impact, "Arial Black", sans-serif',
+      opacity: fadeOut ? 0 : 1,
+      pointerEvents: fadeOut ? 'none' : 'auto',
+      transition: 'opacity 0.8s ease-out',
     }}>
       <div style={{
         width: '80px',

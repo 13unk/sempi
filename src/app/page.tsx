@@ -154,7 +154,7 @@ export default function Home() {
           )
         );
         const elapsed = Date.now() - startTime;
-        const minDuration = 2000;
+        const minDuration = 1000;
         if (elapsed < minDuration) {
           await new Promise(resolve => setTimeout(resolve, minDuration - elapsed));
         }
@@ -286,7 +286,7 @@ export default function Home() {
 
   return (
     <div style={{ height: "100vh", width: "100vw", background: "#000", position: "relative", overflow: "hidden" }}>
-      {!ready && <LoadingScreen />}
+      <LoadingScreen fadeOut={ready} />
       <div
         ref={wrapperRef}
         onClick={() => {

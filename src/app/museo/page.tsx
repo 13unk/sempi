@@ -23,7 +23,7 @@ export default function Museo() {
         )
       );
       const elapsed = Date.now() - startTime;
-      const minDuration = 2000;
+      const minDuration = 1000;
       if (elapsed < minDuration) {
         await new Promise(resolve => setTimeout(resolve, minDuration - elapsed));
       }
@@ -43,7 +43,7 @@ export default function Museo() {
       padding: "40px 10px",
       fontFamily: "Impact, 'Arial Black', sans-serif"
     }}>
-      {!ready && <LoadingScreen />}
+      <LoadingScreen fadeOut={ready} />
       <div style={{ opacity: ready ? 1 : 0, transition: "opacity 0.8s ease-in" }}>
       <style>{`
         .museo-title {
