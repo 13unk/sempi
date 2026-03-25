@@ -34,7 +34,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ fadeOut }) => {
               backgroundColor: '#1ffa13',
               borderRadius: '50%',
               display: 'inline-block',
-              animation: 'bounce 1.4s infinite ease-in-out both',
+              animation: 'bounce 1.4s ease-in-out both',
               animationDelay: `${i * 0.16}s`,
               boxShadow: '0 0 15px rgba(31, 250, 19, 0.6)',
             }}
