@@ -21,15 +21,26 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ fadeOut }) => {
       transition: 'opacity 0.8s ease-out',
     }}>
       <div style={{
-        width: '80px',
-        height: '80px',
-        border: '8px solid rgba(31, 250, 19, 0.1)',
-        borderTop: '8px solid #1ffa13',
-        borderRadius: '50%',
-        animation: 'spin 1s linear infinite',
+        display: 'flex',
+        gap: '8px',
         marginBottom: '20px',
-        boxShadow: '0 0 20px rgba(31, 250, 19, 0.4)',
-      }} />
+      }}>
+        {[0, 1, 2].map((i) => (
+          <div
+            key={i}
+            style={{
+              width: '16px',
+              height: '16px',
+              backgroundColor: '#1ffa13',
+              borderRadius: '50%',
+              display: 'inline-block',
+              animation: 'bounce 1.4s infinite ease-in-out both',
+              animationDelay: `${i * 0.16}s`,
+              boxShadow: '0 0 15px rgba(31, 250, 19, 0.6)',
+            }}
+          />
+        ))}
+      </div>
       <h2 style={{
         color: '#1ffa13',
         fontSize: '32px',
@@ -42,9 +53,9 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ fadeOut }) => {
         CARGANDO SEMPI...
       </h2>
       <style>{`
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+        @keyframes bounce {
+          0%, 80%, 100% { transform: scale(0); }
+          40% { transform: scale(1.0); }
         }
       `}</style>
     </div>
